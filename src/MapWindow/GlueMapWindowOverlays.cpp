@@ -154,32 +154,41 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
-  TCHAR buffer[80];
-
-  fixed MapWidth = projection.GetScreenWidthMeters();
-
+  // slightly oversize the initial string to have a certain padding effect
   canvas.select(Fonts::MapBold);
-  Units::FormatUserMapScale(MapWidth, buffer,
-                            sizeof(buffer) / sizeof(TCHAR), true);
-  PixelSize TextSize = canvas.text_size(buffer);
+  PixelSize dummy_size = canvas.text_size(_T("5000 km"));
 
-  int Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
-  // 2: add 1pix border
+  // calculate minimum width of the scale bar
+  fixed min_width = projection.DistancePixelsToMeters(dummy_size.cx);
 
-  canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
-                        TextSize.cx + Layout::Scale(11), rc.bottom,
+  // convert it to user units for following roundup calculation
+  min_width = Units::ToUserDistance(min_width);
+
+  // round it to the next "round" distance
+
+  // start with 0.1 (km, nm or sm)
+  fixed width = fixed(0.1);
+  for (unsigned i = 0; width < min_width; i++)
+    // scale in steps like 1, 2, 5, 10, 20, 50, 100, ...
+    width *= (i % 3 == 1) ? fixed(2.5) : fixed_two;
+
+  // convert the width back into system units
+  width = Units::ToSysDistance(width);
+
+  // calculate the final width of the scale bar
+  unsigned screen_width = projection.GeoToScreenDistance(width);
+
+  // draw scale bar
+  canvas.fill_rectangle(Layout::Scale(2), rc.bottom - (dummy_size.cy * 3) / 6,
+                        Layout::Scale(2) + screen_width, rc.bottom,
                         COLOR_WHITE);
 
+  // draw scale text on top of the scale bar
+  TCHAR buffer[80];
   canvas.background_transparent();
   canvas.set_text_color(COLOR_BLACK);
-
-  canvas.text(Layout::Scale(7),
-              rc.bottom - Fonts::MapBold.get_ascent_height() - Layout::Scale(1),
-              buffer);
-
-  Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(9) + TextSize.cx,
-                                   rc.bottom - Height);
+  Units::FormatUserMapScale(width, buffer, sizeof(buffer) / sizeof(TCHAR));
+  canvas.text(Layout::Scale(5), rc.bottom - dummy_size.cy, buffer);
 
   buffer[0] = '\0';
   if (SettingsMap().AutoZoom)
@@ -221,7 +230,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   }
 
   if (buffer[0]) {
-    int y = rc.bottom - Height;
+    int y = rc.bottom - dummy_size.cy - Layout::Scale(3);
 
     canvas.select(Fonts::Title);
     canvas.background_opaque();
