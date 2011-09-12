@@ -33,6 +33,9 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
+#include "Log/Log.hpp"
+#include "Log/LandingMessage.hpp"
+#include "Log/TakeoffMessage.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "LocalTime.hpp"
 
@@ -287,6 +290,7 @@ GlideComputer::OnTakeoff()
   GlideComputerAirData::OnTakeoff();
   GlideComputerTask::OnTakeoff();
   InputEvents::processGlideComputer(GCE_TAKEOFF);
+  Log::Add(new Log::TakeoffMessage(Basic().clock));
 }
 
 void
@@ -294,6 +298,7 @@ GlideComputer::OnLanding()
 {
   GlideComputerAirData::OnLanding();
   InputEvents::processGlideComputer(GCE_LANDING);
+  Log::Add(new Log::LandingMessage(Basic().clock, Calculated().flight.flight_time));
 }
 
 void

@@ -66,6 +66,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Dialogs/LogDialog.hpp"
 #include "Message.hpp"
 #include "Marks.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -104,6 +105,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Compiler.h"
 #include "Util/Macros.hpp"
 #include "Net/Features.hpp"
+#include "Look/Look.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -631,7 +633,9 @@ InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
 {
-  dlgChecklistShowModal();
+  ShowLog(CommonInterface::main_window,
+          CommonInterface::main_window.look->dialog);
+  //dlgChecklistShowModal();
 }
 
 // FLARM Traffic

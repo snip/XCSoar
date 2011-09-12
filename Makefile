@@ -111,6 +111,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
+	$(SRC)/Dialogs/LogDialog.cpp \
 	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
 	$(SRC)/Dialogs/MapItemListDialog.cpp \
@@ -268,6 +269,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Computer/GlideComputerRoute.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
+	$(SRC)/Log/Log.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/Logger/Logger.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \

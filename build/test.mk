@@ -1998,6 +1998,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerAirData.cpp \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
+	$(SRC)/Log/Log.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsMap.cpp \
