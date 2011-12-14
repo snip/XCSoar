@@ -40,9 +40,7 @@ Copyright_License {
 #include <shlobj.h>
 #endif
 
-#ifdef _WIN32_WCE
 #include "OS/FlashCardEnumerator.hpp"
-#endif
 
 #ifdef ANDROID
 #include <android/log.h>
