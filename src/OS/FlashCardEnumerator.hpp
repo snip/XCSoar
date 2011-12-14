@@ -26,6 +26,8 @@ Copyright_License {
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #include "FlashCardEnumeratorCE.hpp"
+#elif defined(WIN32) && !defined(_WIN32_WCE)
+#include "FlashCardEnumeratorWindows.hpp"
 #endif
 
 #endif
