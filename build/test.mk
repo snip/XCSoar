@@ -616,7 +616,8 @@ DEBUG_PROGRAM_NAMES = \
 	TestNotify \
 	DebugDisplay \
 	RunFlarmUtils \
-	RunTCPListener
+	RunTCPListener \
+	RunTCPClient
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -1039,6 +1040,26 @@ endif
 endif
 
 $(eval $(call link-program,RunTCPListener,RUN_TCP_LISTENER))
+
+RUN_TCP_CLIENT_SOURCES = \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Device/Port/TCPClientPort.cpp \
+	$(TEST_SRC_DIR)/RunTCPClient.cpp
+
+ifeq ($(HAVE_POSIX),n)
+ifeq ($(HAVE_CE),y)
+RUN_TCP_CLIENT_LDLIBS += -lwinsock
+else
+RUN_TCP_CLIENT_LDLIBS += -lws2_32
+endif
+endif
+
+$(eval $(call link-program,RunTCPClient,RUN_TCP_CLIENT))
 
 RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
