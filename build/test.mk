@@ -1930,6 +1930,13 @@ FEED_NMEA_SOURCES = \
 $(eval $(call link-program,FeedNMEA,FEED_NMEA))
 
 FEED_TCP_SOURCES = \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Device/Port/TCPClientPort.cpp \
 	$(TEST_SRC_DIR)/FeedTCP.cpp
 
 ifeq ($(HAVE_POSIX),n)

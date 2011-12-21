@@ -26,20 +26,17 @@ Copyright_License {
  * port 4353 and feeds NMEA data read from stdin to it.
  */
 
-#include <fcntl.h>
+#include "Device/Port/TCPClientPort.hpp"
+
 #include <unistd.h>
 #include <stdio.h>
-#include <string.h>
-#include <errno.h>
 #include <stdlib.h>
 
-#ifdef HAVE_POSIX
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#else
-#include <winsock2.h>
-#endif
+class NullHandler : public Port::Handler {
+public:
+  virtual void DataReceived(const void *data, size_t length) {
+  }
+};
 
 int main(int argc, char **argv)
 {
@@ -55,31 +52,11 @@ int main(int argc, char **argv)
     tcp_port = atoi(argv[1]);
   }
 
-  // Convert IP address to binary form
-  struct sockaddr_in server_addr;
-  if ((server_addr.sin_addr.s_addr = inet_addr("127.0.0.1")) == INADDR_NONE) {
-    perror("IP");
-    exit(1);
-  }
-
-  // Create socket for the outgoing connection
-  int sock;
-  if ((sock = socket(AF_INET, SOCK_STREAM, 0)) == -1) {
-    perror("Socket");
-    exit(1);
-  }
-
-  // Connect to the specified server
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port = htons(tcp_port);
-  memset(&(server_addr.sin_zero), 0, 8);
-
-  if (connect(sock, (struct sockaddr *)&server_addr,
-              sizeof(struct sockaddr)) == -1)
-  {
-    close(sock);
-    perror("Connect");
-    exit(1);
+  NullHandler handler;
+  TCPClientPort port("127.0.0.1", tcp_port, handler);
+  if (!port.Open() || !port.StartRxThread()) {
+    fprintf(stderr, "Failed to open TCP port\n");
+    return EXIT_FAILURE;
   }
 
   char stamp[6] = "";
@@ -114,9 +91,8 @@ int main(int argc, char **argv)
       fflush(stdout);
     }
 
-    send(sock,line,l, 0);
+    port.Write(line, l);
   }
-  close(sock);
   printf(">>>> Av %ld\n", c_count/l_count);
   return 0;
 }
