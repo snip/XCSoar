@@ -10,6 +10,10 @@
       <Canvas OnPaint="OnLogoPaint" />
     </Panel>
     
+    <Panel>
+      <TextEdit Name="Changelog" ReadOnly="1" MultiLine="1" />
+    </Panel>
+
     <Panel Name="frmAuthors">
       <TextEdit Name="prpAuthors" ReadOnly="1" MultiLine="1" />
     </Panel>

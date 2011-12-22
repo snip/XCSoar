@@ -210,7 +210,18 @@ $(TEXT_COMPRESSED): $(DATA)/%.gz: % | $(DATA)/dirstamp
 	$(Q)gzip --best <$< >$@.tmp
 	$(Q)mv $@.tmp $@
 
-RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED)
+CHANGELOG_TRUNCATED = $(DATA)/NEWS-short.txt
+$(CHANGELOG_TRUNCATED): NEWS.txt | $(DATA)/dirstamp
+	@$(NQ)echo "  TRUNC   $@"
+	$(Q)python tools/truncate_news.py $< $@
+
+CHANGELOG_COMPRESSED = $(patsubst %,%.gz,$(CHANGELOG_TRUNCATED))
+$(CHANGELOG_COMPRESSED): %.gz: % | $(DATA)/dirstamp
+	@$(NQ)echo "  GZIP    $@"
+	$(Q)gzip --best <$< >$@.tmp
+	$(Q)mv $@.tmp $@
+
+RESOURCE_FILES = $(DIALOG_COMPRESSED) $(TEXT_COMPRESSED) $(CHANGELOG_COMPRESSED)
 
 ifeq ($(TARGET),ANDROID)
 RESOURCE_FILES += $(patsubst po/%.po,$(OUT)/po/%.mo,$(wildcard po/*.po))

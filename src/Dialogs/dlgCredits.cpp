@@ -173,6 +173,7 @@ dlgCreditsShowModal(SingleWindow &parent)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
+  LoadTextFromResource(_T("CHANGELOG"), _T("Changelog"));
   LoadTextFromResource(_T("LICENSE"), _T("prpLicense"));
   LoadTextFromResource(_T("AUTHORS"), _T("prpAuthors"));
 

@@ -389,6 +389,7 @@ uk.mo MO DISCARDABLE "../output/po/uk.mo"
 
 LICENSE TEXT DISCARDABLE "../output/data/COPYING.gz"
 AUTHORS TEXT DISCARDABLE "../output/data/AUTHORS.gz"
+CHANGELOG TEXT DISCARDABLE "../output/data/NEWS-short.txt.gz"
 
 // --- EGM96 Raster Data --- 
 
