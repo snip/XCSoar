@@ -76,6 +76,7 @@ static WndButton *wMagnify = NULL;
 static WndButton *wShrink = NULL;
 static const Waypoint *waypoint = NULL;
 static BasicMapWindow *map;
+static fixed map_zoom = fixed(15000);
 
 static StaticArray<Bitmap, 5> images;
 static int zoom = 0;
@@ -105,15 +106,24 @@ NextPage(int Step)
   wCommand->set_visible(page == 3);
   wImage->set_visible(page >= 4);
   zoom = 0;
-  wMagnify->set_visible(page >= 4);
+  wMagnify->set_visible(page == 2 || page >= 4);
   wMagnify->set_enabled(true);
-  wShrink->set_visible(page >= 4);
-  wShrink->set_enabled(false);
+  wShrink->set_visible(page == 2 || page >= 4);
+  wShrink->set_enabled(page == 2);
 }
 
 static void
 OnMagnifyClicked(gcc_unused WndButton &button)
 {
+  if (page == 2) {
+    map_zoom /= fixed_sqrt_two;
+    if (map_zoom < fixed(1000))
+      map_zoom = fixed(1000);
+
+    map->SetTarget(waypoint->location, map_zoom);
+    return;
+  }
+
   if (zoom >= 5)
     return;
   zoom++;
@@ -126,6 +136,15 @@ OnMagnifyClicked(gcc_unused WndButton &button)
 static void
 OnShrinkClicked(gcc_unused WndButton &button)
 {
+  if (page == 2) {
+    map_zoom *= fixed_sqrt_two;
+    if (map_zoom > fixed(100000))
+      map_zoom = fixed(100000);
+
+    map->SetTarget(waypoint->location, map_zoom);
+    return;
+  }
+
   if (zoom <= 0)
     return;
   zoom--;
@@ -696,7 +715,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
   assert(wf != NULL);
   assert(map != NULL);
 
-  map->SetTarget(waypoint->location, fixed(15000));
+  map->SetTarget(waypoint->location, map_zoom);
 
   UpdateCaption(waypoint->name.c_str());
   UpdateComment(waypoint->comment.c_str());
