@@ -68,6 +68,28 @@ CheckChecksum(const void *_data, size_t length)
   return CalculateChecksum(data, length) == 0;
 }
 
+gcc_unused
+static void
+PrintDebug(unsigned sentence_number, const void *data, size_t length)
+{
+  if (length == 0)
+    return;
+
+  printf("Received sentence #%d with length = %d\n", sentence_number, length);
+
+  for (unsigned i = 0; i < length; i++) {
+    printf("%02x ", ((const uint8_t *)data)[i]);
+
+    if (i % 16 == 15)
+      printf("\n");
+    else if (i % 8 == 7)
+      printf("  ");
+  }
+  printf("\n");
+
+  fflush(stdout);
+}
+
 bool
 WesterboerVW921Device::DataReceived(const void *_data, size_t length,
                                     struct NMEAInfo &info)
