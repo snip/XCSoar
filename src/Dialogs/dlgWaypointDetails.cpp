@@ -39,7 +39,8 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
+#include "MapWindow/BasicMapWindow.hpp"
+#include "Look/Look.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
@@ -74,6 +75,7 @@ static WndOwnerDrawFrame *wImage = NULL;
 static WndButton *wMagnify = NULL;
 static WndButton *wShrink = NULL;
 static const Waypoint *waypoint = NULL;
+static BasicMapWindow *map;
 
 static StaticArray<Bitmap, 5> images;
 static int zoom = 0;
@@ -83,7 +85,7 @@ NextPage(int Step)
 {
   assert(waypoint);
 
-  int last_page = 2 + images.size();
+  int last_page = 3 + images.size();
   do {
     page += Step;
     if (page < 0)
@@ -99,12 +101,13 @@ NextPage(int Step)
 
   wInfo->set_visible(page == 0);
   wDetails->set_visible(page == 1);
-  wCommand->set_visible(page == 2);
-  wImage->set_visible(page >= 3);
+  map->set_visible(page == 2);
+  wCommand->set_visible(page == 3);
+  wImage->set_visible(page >= 4);
   zoom = 0;
-  wMagnify->set_visible(page >= 3);
+  wMagnify->set_visible(page >= 4);
   wMagnify->set_enabled(true);
-  wShrink->set_visible(page >= 3);
+  wShrink->set_visible(page >= 4);
   wShrink->set_enabled(false);
 }
 
@@ -392,19 +395,6 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnActivatePanClicked(gcc_unused WndButton &button)
-{
-  GlueMapWindow *map_window = CommonInterface::main_window.ActivateMap();
-  if (map_window == NULL)
-    return;
-
-  map_window->PanTo(waypoint->location);
-  XCSoarInterface::main_window.SetFullScreen(true);
-  InputEvents::setMode(InputEvents::MODE_PAN);
-  wf->SetModalResult(mrOK);
-}
-
-static void
 OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.ClearWhite();
@@ -474,6 +464,23 @@ OnFileListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 }
 #endif
 
+static Window *
+OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+            UPixelScalar width, UPixelScalar height,
+            const WindowStyle style)
+{
+  const Look &look = CommonInterface::main_window.GetLook();
+
+  map = new BasicMapWindow(look.map.waypoint, look.map.airspace);
+  map->SetTerrain(terrain);
+  map->SetTopograpgy(topography);
+  map->SetAirspaces(&airspace_database);
+  map->SetWaypoints(&way_points);
+  map->set(parent, left, top, width, height, style);
+
+  return map;
+}
+
 static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnMagnifyClicked),
     DeclareCallBackEntry(OnShrinkClicked),
@@ -486,8 +493,8 @@ static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnAppendInTaskClicked),
     DeclareCallBackEntry(OnRemoveFromTaskClicked),
     DeclareCallBackEntry(OnNewHomeClicked),
-    DeclareCallBackEntry(OnActivatePanClicked),
     DeclareCallBackEntry(OnImagePaint),
+    DeclareCallBackEntry(OnCreateMap),
     DeclareCallBackEntry(NULL)
 };
 
@@ -687,6 +694,9 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint &_waypoint,
                   Layout::landscape ? _T("IDR_XML_WAYPOINTDETAILS_L") :
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
+  assert(map != NULL);
+
+  map->SetTarget(waypoint->location, fixed(15000));
 
   UpdateCaption(waypoint->name.c_str());
   UpdateComment(waypoint->comment.c_str());
