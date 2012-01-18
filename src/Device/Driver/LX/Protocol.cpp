@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/LX/Protocol.hpp"
 #include "Operation/Operation.hpp"
-
+#include <stdio.h>
 bool
 LX::CommandMode(Port &port)
 {
@@ -106,7 +106,18 @@ LX::ReadCRC(Port &port, void *buffer, size_t length, unsigned timeout_ms)
 {
   uint8_t crc;
 
-  return port.FullRead(buffer, length, timeout_ms) &&
-    port.FullRead(&crc, sizeof(crc), timeout_ms) &&
-    calc_crc(buffer, length, 0xff) == crc;
+  printf("#1\n"); fflush(stdout);
+  if (!port.FullRead(buffer, length, timeout_ms))
+    return false;
+  printf("#2\n"); fflush(stdout);
+
+  if (!port.FullRead(&crc, sizeof(crc), timeout_ms))
+    return false;
+
+  printf("#3\n"); fflush(stdout);
+  if (calc_crc(buffer, length, 0xff) == crc)
+    return true;
+  printf("#4\n"); fflush(stdout);
+
+  return false;
 }

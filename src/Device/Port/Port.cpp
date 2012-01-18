@@ -84,7 +84,7 @@ Port::FullFlush(unsigned timeout_ms)
   char buffer[0x100];
   while (Read(buffer, sizeof(buffer)) && !clock.Check(timeout_ms)) {}
 }
-
+#include <stdio.h>
 bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {
@@ -97,6 +97,7 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
       return false;
 
     int nbytes = Read(p, end - p);
+    printf("## %d bytes read\n", nbytes); fflush(stdout);
     if (nbytes == -1)
       return false;
 

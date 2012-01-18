@@ -104,26 +104,29 @@ static bool
 ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
                     OperationEnvironment &env)
 {
+  printf("1\n"); fflush(stdout);
   if (!LX::CommandMode(port))
     return false;
-
+  printf("2\n"); fflush(stdout);
   port.Flush();
   if (!LX::SendCommand(port, LX::READ_FLIGHT_LIST))
     return false;
-
+  printf("3\n"); fflush(stdout);
   bool success = true;
   while (!flight_list.full()) {
+    printf("a\n"); fflush(stdout);
     LX::FlightInfo flight;
     if (!LX::ReadCRC(port, &flight, sizeof(flight), 150000))
       break;
-
+    printf("b\n"); fflush(stdout);
     success = true;
     if (!flight.IsValid())
       break;
-
+    printf("c\n"); fflush(stdout);
     RecordedFlightInfo dest;
     if (Copy(dest, flight))
       flight_list.append(dest);
+    printf("d\n"); fflush(stdout);
   }
 
   return success;
