@@ -97,7 +97,7 @@ Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
       return false;
 
     int nbytes = Read(p, end - p);
-    if (nbytes <= 0)
+    if (nbytes == -1)
       return false;
 
     p += nbytes;
