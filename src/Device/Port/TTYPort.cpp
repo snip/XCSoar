@@ -277,7 +277,7 @@ TTYPort::Read(void *Buffer, size_t Size)
 
   int ret = poll(&pfd, 1, rx_timeout);
   if (ret != 1)
-    return -1;
+    return 0;
 
   return read(fd, Buffer, Size);
 }
