@@ -29,6 +29,10 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 
+#ifndef _UNICODE
+#include "Util/UTF8.hpp"
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -52,8 +56,19 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
     tmp[0] = bytes[z];
     tmp[1] = bytes[z+1];
 
+#ifdef _UNICODE
     *curChar = (unsigned char)strtoul(tmp, NULL, 16);
     curChar++;
+#else
+    size_t current_length = curChar - res;
+    size_t remaining_buffer_size = charCount - current_length;
+    char *p = Latin1ToUTF8(strtoul(tmp, NULL, 16), curChar,
+                           remaining_buffer_size);
+    if (p == curChar)
+      break;
+
+    curChar = p;
+#endif
   }
 
   *curChar = 0;

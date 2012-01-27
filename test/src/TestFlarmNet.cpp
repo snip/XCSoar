@@ -26,10 +26,10 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(15);
+  plan_tests(23);
 
   int count = FlarmNet::LoadFile(_T("test/data/flarmnet/data.fln"));
-  ok1(count == 6);
+  ok1(count == 7);
 
   FlarmId id, id2;
   id.Parse("DDA85C", NULL);
@@ -73,6 +73,19 @@ int main(int argc, char **argv)
   }
   ok1(foundDDA85C);
   ok1(foundDDA896);
+
+
+  id.Parse("DDAFF9", NULL);
+  record = FlarmNet::FindRecordById(id);
+  ok1(record != NULL);
+
+  ok1(_tcscmp(record->id, _T("DDAFF9")) == 0);
+  ok1(_tcscmp(record->pilot, _T("Förderverein SH")) == 0);
+  ok1(_tcscmp(record->airfield, _T("EDXM")) == 0);
+  ok1(_tcscmp(record->plane_type, _T("LS-1")) == 0);
+  ok1(_tcscmp(record->registration, _T("D-0667")) == 0);
+  ok1(_tcscmp(record->callsign, _T("T")) == 0);
+  ok1(_tcscmp(record->frequency, _T("123.400")) == 0);
 
   FlarmNet::Destroy();
 
