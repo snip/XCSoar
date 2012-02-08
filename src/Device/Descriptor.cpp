@@ -30,6 +30,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "Port/ConfiguredPort.hpp"
+#include "Port/DumpPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
@@ -81,7 +82,7 @@ DeviceDescriptor::Open(Port &_port, const DeviceRegister &_driver,
   settings_received.Clear();
   was_connected = false;
 
-  port = &_port;
+  port = new DumpPort(_port);
   driver = &_driver;
 
   assert(driver->CreateOnPort != NULL || driver->IsNMEAOut());
