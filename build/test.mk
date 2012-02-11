@@ -1281,6 +1281,11 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/DumpPort.cpp \
+	$(SRC)/LogFile.cpp \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Formatter/IGCFilenameFormatter.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \

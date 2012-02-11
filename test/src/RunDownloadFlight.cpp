@@ -31,6 +31,9 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Device/Port/DumpPort.hpp"
+#include "LocalPath.hpp"
+#include "Formatter/IGCFilenameFormatter.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/Port/TTYPort.hpp"
@@ -80,8 +83,6 @@ int main(int argc, char **argv)
   config.Clear();
   config.baud_rate = atoi(argv[3]);
 
-  unsigned flight_id = (argc == 6 ? atoi(argv[5]) : 0);
-
 #ifdef HAVE_POSIX
   TTYPort port(port_name, config.baud_rate, *(Port::Handler *)NULL);
 #else
@@ -91,6 +92,9 @@ int main(int argc, char **argv)
     fprintf(stderr, "Failed to open COM port\n");
     return EXIT_FAILURE;
   }
+
+  InitialiseDataPath();
+  DumpPort dump_port(port);
 
   ConsoleOperationEnvironment env;
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
@@ -105,7 +109,7 @@ int main(int argc, char **argv)
   }
 
   assert(driver->CreateOnPort != NULL);
-  Device *device = driver->CreateOnPort(config, port);
+  Device *device = driver->CreateOnPort(config, dump_port);
   assert(device != NULL);
 
   if (!device->Open(env)) {
@@ -137,18 +141,14 @@ int main(int argc, char **argv)
 
   PrintFlightList(flight_list);
 
-  if (flight_id >= flight_list.size()) {
-    device->DisableDownloadMode();
-    delete device;
-    fprintf(stderr, "Flight id not found\n");
-    return EXIT_FAILURE;
-  }
-
-  if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
-    device->DisableDownloadMode();
-    delete device;
-    fprintf(stderr, "Failed to download flight\n");
-    return EXIT_FAILURE;
+  for (unsigned flight_id = 0; flight_id < flight_list.size(); flight_id++) {
+    if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
+      device->DisableDownloadMode();
+      delete device;
+      fprintf(stderr, "Failed to download flight %u/%u\n",
+              flight_id, flight_list.size());
+      return EXIT_FAILURE;
+    }
   }
 
   device->DisableDownloadMode();
