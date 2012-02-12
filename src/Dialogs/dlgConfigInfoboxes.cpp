@@ -372,6 +372,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   const UPixelScalar height = Layout::Scale(22);
   const UPixelScalar caption_width = Layout::Scale(60);
+  const UPixelScalar caption_padding = Layout::Scale(3);
 
   ButtonWindowStyle button_style;
   button_style.TabStop();
@@ -387,7 +388,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.bottom = control_rc.top + height;
 
   edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
-                                control_rc, caption_width,
+                                control_rc, caption_width, caption_padding,
                                 style, edit_style,
                                 NULL);
 
@@ -404,7 +405,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   control_rc.bottom += height;
 
   edit_content = new WndProperty(client_area, dialog_look, _("Content"),
-                                 control_rc, caption_width,
+                                 control_rc, caption_width, caption_padding,
                                  style, edit_style,
                                  NULL);
 

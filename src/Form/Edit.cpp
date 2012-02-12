@@ -137,12 +137,12 @@ WndProperty::Editor::OnKillFocus()
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const TCHAR *Caption,
                          const PixelRect &rc,
-                         int CaptionWidth,
+                         int CaptionWidth, unsigned _caption_padding,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
   :look(_look), edit(this),
-   caption_width(CaptionWidth),
+   caption_width(CaptionWidth), caption_padding(_caption_padding),
    mOnDataChangeNotify(DataChangeNotify),
    mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
@@ -169,7 +169,7 @@ WndProperty::~WndProperty(void)
 UPixelScalar
 WndProperty::GetRecommendedCaptionWidth() const
 {
-  return look.text_font->TextSize(mCaption).cx;
+  return look.text_font->TextSize(mCaption).cx + caption_padding;
 }
 
 void
@@ -356,7 +356,7 @@ WndProperty::OnPaint(Canvas &canvas)
       org.x = edit_rc.left;
       org.y = edit_rc.top - tsize.cy;
     } else {
-      org.x = caption_width - (tsize.cx + 1);
+      org.x = caption_width - tsize.cx - caption_padding;
       org.y = (get_size().cy - tsize.cy) / 2;
     }
 

@@ -92,6 +92,7 @@ private:
 
   /** Width reserved for the caption of the Control */
   PixelScalar caption_width;
+  UPixelScalar caption_padding;
 
   /** Function to call when the Editor data has changed */
   DataChangeCallback_t mOnDataChangeNotify;
@@ -117,7 +118,7 @@ public:
    */
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
-              const PixelRect &rc, int CaptionWidth,
+              const PixelRect &rc, int CaptionWidth, unsigned _caption_padding,
               const WindowStyle style,
               const EditWindowStyle edit_style,
               DataChangeCallback_t DataChangeNotify);

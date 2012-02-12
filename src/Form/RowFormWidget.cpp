@@ -196,6 +196,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
+                    (*label == '\0') ? 0 : Layout::FastScale(3),
                     style, edit_style, NULL);
   if (help != NULL)
     edit->SetHelpText(help);
@@ -356,7 +357,8 @@ RowFormWidget::AddSpacer(void)
   edit_style.read_only();
 
   PanelControl &panel = *(PanelControl *)GetWindow();
-  WndProperty *edit = new WndProperty(panel, look, _T(""), edit_rc, 0, style, edit_style, NULL);
+  WndProperty *edit = new WndProperty(panel, look, _T(""), edit_rc, 0, 0,
+                                      style, edit_style, NULL);
   Add(edit);
   return edit;
 }
@@ -411,6 +413,7 @@ RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
   WndProperty *edit =
     new WndProperty(panel, look, label,
                     edit_rc, (*label == '\0') ? 0 : 100,
+                    (*label == '\0') ? 0 : Layout::FastScale(3),
                     style, edit_style, NULL);
   if (help != NULL)
     edit->SetHelpText(help);

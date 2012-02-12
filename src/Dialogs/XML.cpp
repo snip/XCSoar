@@ -585,6 +585,10 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     caption_width = ScaleWidth(caption_width);
 
+    // Determine the padding of the caption field
+    unsigned caption_padding = Layout::Scale(StringToIntDflt(
+        node.getAttribute(_T("CaptionPadding")), 3));
+
     // Determine whether the control is multiline or readonly
     bool multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
     bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
@@ -622,8 +626,8 @@ LoadChild(SubForm &form, ContainerWindow &parent,
 
     WndProperty *property;
     window = property = new WndProperty(parent, *xml_dialog_look, caption, rc,
-                                        caption_width, style, edit_style,
-                                        data_notify_callback);
+                                        caption_width, caption_padding, style,
+                                        edit_style, data_notify_callback);
 
     // Set the help function event callback
     property->SetOnHelpCallback(help_callback);
