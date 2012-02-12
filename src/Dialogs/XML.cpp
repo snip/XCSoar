@@ -280,6 +280,8 @@ CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
     if (StringIsEqual(p->name, name))
       return p->callback;
   }
+
+  return NULL;
 }
 
 static void *
