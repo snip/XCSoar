@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Atmosphere/Pressure.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Port/Port.hpp"
@@ -34,6 +35,16 @@ LXDevice::PutMacCready(fixed MacCready)
   char szTmp[32];
   sprintf(szTmp, "PFLX2,%1.1f,,,,,,", (double)MacCready);
   PortWriteNMEA(port, szTmp);
+  return true;
+}
 
+bool
+LXDevice::PutQNH(const AtmosphericPressure &pres)
+{
+  fixed altitude_offset = pres.StaticPressureToQNHAltitude(
+      AtmosphericPressure::Standard());
+  char buf[100];
+  sprintf(buf, "PFLX3,%.2f,,,,,,,,,,,,", (double)altitude_offset / 0.3048);
+  PortWriteNMEA(port, buf);
   return true;
 }
