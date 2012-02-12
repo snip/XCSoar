@@ -608,6 +608,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     style.ControlParent();
 
     EditWindowStyle edit_style;
+    edit_style.SetPadding(Layout::FastScale(2));
     edit_style.vertical_center();
     if (read_only)
       edit_style.read_only();
@@ -656,6 +657,7 @@ LoadChild(SubForm &form, ContainerWindow &parent,
     bool read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
 
     EditWindowStyle edit_style(style);
+    edit_style.SetPadding(Layout::FastScale(2));
     if (read_only)
       edit_style.read_only();
     else

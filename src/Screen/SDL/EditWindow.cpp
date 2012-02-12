@@ -31,6 +31,7 @@ EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
                 const EditWindowStyle style)
 {
   read_only = style.is_read_only;
+  padding = style.padding;
 
   Window::set(&parent, left, top, width, height, style);
 }
@@ -40,6 +41,7 @@ EditWindow::set(ContainerWindow &parent, const PixelRect rc,
                 const EditWindowStyle style)
 {
   read_only = style.is_read_only;
+  padding = style.padding;
 
   Window::set(&parent, rc, style);
 }
@@ -69,6 +71,9 @@ EditWindow::OnPaint(Canvas &canvas)
     return;
 
   canvas.SetBackgroundTransparent();
+
+  if (padding != 0)
+    InflateRect(&rc, -padding, -padding);
 
   if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)
     canvas.formatted_text(&rc, value.c_str(), get_text_style());

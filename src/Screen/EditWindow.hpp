@@ -34,17 +34,20 @@ Copyright_License {
 #include <winuser.h>
 
 class EditWindowStyle : public WindowStyle {
+#ifndef USE_GDI
 public:
   bool is_read_only;
+  UPixelScalar padding;
+#endif
 
 public:
 #ifndef USE_GDI
-  EditWindowStyle():is_read_only(false) {
+  EditWindowStyle():is_read_only(false), padding(0) {
     text_style |= DT_LEFT | DT_VCENTER;
   }
 
   EditWindowStyle(const WindowStyle other)
-    :WindowStyle(other), is_read_only(false) {
+    :WindowStyle(other), is_read_only(false), padding(0) {
     text_style |= DT_LEFT | DT_VCENTER;
   }
 #else
@@ -92,6 +95,14 @@ public:
     // TODO
 #endif
   }
+
+  void SetPadding(unsigned _padding) {
+#ifndef USE_GDI
+    padding = _padding;
+#else
+    // TODO
+#endif
+  }
 };
 
 /**
@@ -100,6 +111,7 @@ public:
 class EditWindow : public Window {
 #ifndef USE_GDI
   bool read_only;
+  UPixelScalar padding;
 
   tstring value;
 #endif

@@ -179,6 +179,7 @@ RowFormWidget::Add(const TCHAR *label, const TCHAR *help, bool read_only)
 
   EditWindowStyle edit_style;
   edit_style.vertical_center();
+  edit_style.SetPadding(Layout::FastScale(2));
 
   if (read_only)
     edit_style.read_only();
@@ -353,6 +354,7 @@ RowFormWidget::AddSpacer(void)
 
   WindowStyle style;
   EditWindowStyle edit_style;
+  edit_style.SetPadding(Layout::FastScale(2));
   edit_style.vertical_center();
   edit_style.read_only();
 
@@ -398,6 +400,7 @@ RowFormWidget::AddMultiLine(const TCHAR *label, const TCHAR *help,
   WindowStyle style;
 
   EditWindowStyle edit_style;
+  edit_style.SetPadding(Layout::FastScale(2));
   edit_style.multiline();
   edit_style.VerticalScroll();
   edit_style.read_only();
