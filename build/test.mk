@@ -688,7 +688,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunFlarmUtils \
 	RunTCPListener \
 	TaskInfo \
-	IGC2NMEA
+	IGC2NMEA \
+	XCSoarConnect
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA \
@@ -712,6 +713,65 @@ DEBUG_PROGRAM_NAMES += TodayInstall
 endif
 
 DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
+
+XCSOAR_CONNECT_SOURCES = \
+	$(SRC)/ProgressGlue.cpp \
+	$(SRC)/Version.cpp \
+	$(SRC)/Atmosphere/Pressure.cpp \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Descriptor.cpp \
+	$(SRC)/Form/SubForm.cpp \
+	$(SRC)/Form/Form.cpp \
+	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/MessageOperationEnvironment.cpp \
+	$(SRC)/Operation/VerboseOperationEnvironment.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(SRC)/Units/System.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeVega.cpp \
+	$(TEST_SRC_DIR)/XCSoarConnect.cpp
+
+ifeq ($(HAVE_POSIX),y)
+XCSOAR_CONNECT_SOURCES += \
+	$(SRC)/Device/Port/TTYPort.cpp
+else
+XCSOAR_CONNECT_SOURCES += \
+	$(SRC)/Device/Port/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+XCSOAR_CONNECT_SOURCES += \
+	$(SRC)/Device/Port/Widcomm.cpp
+endif
+
+XCSOAR_CONNECT_DEPENDS = SCREEN DRIVER ENGINE MATH UTIL IO
+$(eval $(call link-program,XCSoarConnect,XCSOAR_CONNECT))
 
 DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
