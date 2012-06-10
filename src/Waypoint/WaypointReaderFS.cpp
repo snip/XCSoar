@@ -185,7 +185,6 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
       (is_utm && !ParseLocationUTM(line + 9, waypoint.location)))
     return ParseLineResult::FAILURE;
 
-  waypoint.file_num = file_num;
   waypoint.original_id = 0;
 
   if (!ParseString(line, waypoint.name, 8))

@@ -214,7 +214,6 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   line++;
 
   // Create new waypoint instance
-  waypoint.file_num = file_num;
   waypoint.original_id = 0;
   waypoint.name.assign(name, name_length);
 

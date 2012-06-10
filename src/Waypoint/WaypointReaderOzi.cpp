@@ -102,8 +102,6 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  waypoint.file_num = file_num;
-
   long value;
   waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
 

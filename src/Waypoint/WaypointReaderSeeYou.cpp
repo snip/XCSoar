@@ -221,7 +221,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
   waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  waypoint.file_num = file_num;
   waypoint.original_id = 0;
 
   // Name (e.g. "Some Turnpoint")
