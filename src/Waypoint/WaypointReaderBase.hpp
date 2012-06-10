@@ -25,6 +25,7 @@ Copyright_License {
 #ifndef WAYPOINTFILE_HPP
 #define WAYPOINTFILE_HPP
 
+#include <stdint.h>
 #include <tchar.h>
 
 struct Waypoint;
@@ -35,6 +36,13 @@ class OperationEnvironment;
 
 class WaypointReaderBase 
 {
+public:
+  enum class ParseLineResult: uint8_t {
+    OKAY,
+    IGNORED,
+    FAILURE,
+  };
+
 protected:
   TCHAR file[255];
   const int file_num;
@@ -75,8 +83,8 @@ protected:
    * @return True if the line was parsed correctly or ignored, False if
    * parsing error occured
    */
-  virtual bool ParseLine(const TCHAR* line, unsigned linenum,
-                         Waypoints &way_points) = 0;
+  virtual ParseLineResult ParseLine(const TCHAR* line, unsigned linenum,
+                                    Waypoints &way_points) = 0;
 
 public:
   // Helper functions

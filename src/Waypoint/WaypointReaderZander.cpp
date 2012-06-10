@@ -146,32 +146,32 @@ ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
   return false;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+                                Waypoints &way_points)
 {
   // If (end-of-file or comment)
   if (line[0] == '\0' ||
       _tcsstr(line, _T("**")) == line ||
       _tcsstr(line, _T("*")) == line)
     // -> return without error condition
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Determine the length of the line
   size_t len = _tcslen(line);
   // If less then 34 characters -> something is wrong -> cancel
   if (len < 34)
-    return false;
+    return ParseLineResult::FAILURE;
 
   GeoPoint location;
 
   // Latitude (Characters 13-20 // DDMMSS(N/S))
   if (!ParseAngle(line + 13, location.latitude, true))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Longitude (Characters 21-29 // DDDMMSS(E/W))
   if (!ParseAngle(line + 21, location.longitude, false))
-    return false;
+    return ParseLineResult::FAILURE;
 
   location.Normalize(); // ensure longitude is within -180:180
 
@@ -181,13 +181,13 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Name (Characters 0-12)
   if (!ParseString(line, new_waypoint.name, 12))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   if (!ParseAltitude(line + 30, new_waypoint.elevation) &&
       !CheckAltitude(new_waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
   if (len > 35)
@@ -199,5 +199,5 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
       new_waypoint.flags.turn_point = true;
 
   way_points.Append(new_waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }

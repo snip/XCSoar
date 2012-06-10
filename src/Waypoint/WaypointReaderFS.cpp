@@ -145,7 +145,7 @@ ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
   return true;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
@@ -164,45 +164,45 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   //Sydney O 56H   0334898   6252272      5  Sydney Opera
 
   if (line[0] == '\0')
-    return true;
+    return ParseLineResult::IGNORED;
 
   if (linenum == 0 &&
       _tcsstr(line, _T("$FormatUTM")) == line) {
     is_utm = true;
-    return true;
+    return ParseLineResult::IGNORED;
   }
 
   if (line[0] == _T('$'))
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Determine the length of the line
   size_t len = _tcslen(line);
   // If less then 27 characters -> something is wrong -> cancel
   if (len < (is_utm ? 39 : 47))
-    return false;
+    return ParseLineResult::FAILURE;
 
   GeoPoint location;
   if ((!is_utm && !ParseLocation(line + 10, location)) ||
       (is_utm && !ParseLocationUTM(line + 9, location)))
-    return false;
+    return ParseLineResult::FAILURE;
 
   Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;
   new_waypoint.original_id = 0;
 
   if (!ParseString(line, new_waypoint.name, 8))
-    return false;
+    return ParseLineResult::FAILURE;
 
   if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
       !CheckAltitude(new_waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
     ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
 
   way_points.Append(new_waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }
 
 bool

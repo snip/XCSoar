@@ -65,16 +65,16 @@ ParseString(const TCHAR *src, tstring &dest)
   return true;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+                             Waypoints &way_points)
 {
   if (line[0] == '\0')
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Ignore first four header lines
   if (linenum < 4)
-    return true;
+    return ParseLineResult::IGNORED;
 
   TCHAR ctemp[255];
   const TCHAR *params[20];
@@ -83,23 +83,23 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Get fields
   n_params = ExtractParameters(line, ctemp, params, max_params, true, _T('"'));
 
   // Check if the basic fields are provided
   if (n_params < 15)
-    return false;
+    return ParseLineResult::FAILURE;
 
   GeoPoint location;
   // Latitude (e.g. 5115.900N)
   if (!ParseAngle(params[2], location.latitude))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
   if (!ParseAngle(params[3], location.longitude))
-    return false;
+    return ParseLineResult::FAILURE;
 
   location.Normalize(); // ensure longitude is within -180:180
 
@@ -110,18 +110,18 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
   new_waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
 
   if (!ParseString(params[1], new_waypoint.name))
-    return false;
+    return ParseLineResult::FAILURE;
 
   if (ParseNumber(params[14], value) && value != -777)
     new_waypoint.elevation = Units::ToSysUnit(fixed(value), Unit::FEET);
   else if (!CheckAltitude(new_waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
   ParseString(params[11], new_waypoint.comment);
 
   way_points.Append(new_waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }
 
 bool

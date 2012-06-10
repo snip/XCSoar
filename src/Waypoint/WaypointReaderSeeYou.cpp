@@ -158,9 +158,9 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
   return true;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &waypoints)
+                                Waypoints &waypoints)
 {
   enum {
     iName = 0,
@@ -182,23 +182,23 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
       StringStartsWith(line, _T("**")) ||
       StringStartsWith(line, _T("*")))
     // -> return without error condition
-    return true;
+    return ParseLineResult::IGNORED;
 
   TCHAR ctemp[4096];
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Skip first line if it doesn't begin with a quotation character
   // (usually the field order line)
   if (linenum == 0 && line[0] != _T('\"'))
-    return true;
+    return ParseLineResult::IGNORED;
 
   // If task marker is reached ignore all following lines
   if (_tcsstr(line, _T("-----Related Tasks-----")) == line)
     ignore_following = true;
   if (ignore_following)
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Get fields
   const TCHAR *params[20];
@@ -209,17 +209,17 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if (iName >= n_params ||
       iLatitude >= n_params ||
       iLongitude >= n_params)
-    return false;
+    return ParseLineResult::FAILURE;
 
   Waypoint new_waypoint;
 
   // Latitude (e.g. 5115.900N)
   if (!ParseAngle(params[iLatitude], new_waypoint.location.latitude, true))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
   if (!ParseAngle(params[iLongitude], new_waypoint.location.longitude, false))
-    return false;
+    return ParseLineResult::FAILURE;
 
   new_waypoint.location.Normalize(); // ensure longitude is within -180:180
 
@@ -228,7 +228,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Name (e.g. "Some Turnpoint")
   if (*params[iName] == _T('\0'))
-    return false;
+    return ParseLineResult::FAILURE;
+
   new_waypoint.name = params[iName];
 
   // Elevation (e.g. 458.0m)
@@ -236,7 +237,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   if ((iElevation >= n_params ||
       !ParseAltitude(params[iElevation], new_waypoint.elevation)) &&
       !CheckAltitude(new_waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Style (e.g. 5)
   if (iStyle < n_params)
@@ -273,5 +274,5 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     new_waypoint.comment = params[iDescription];
 
   waypoints.Append(new_waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }

@@ -186,9 +186,9 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
   return true;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &waypoints)
+                                  Waypoints &waypoints)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
@@ -202,34 +202,35 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   // If (end-of-file)
   if (line[0] == '\0')
     // -> return without error condition
-    return true;
+    return ParseLineResult::IGNORED;
 
   // If comment
   if (line[0] == _T('*')) {
     if (linenum == 0)
       welt2000_format = (_tcsstr(line, _T("WRITTEN BY WELT2000")) != NULL);
     // -> return without error condition
-    return true;
+    return ParseLineResult::IGNORED;
   }
 
   if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
-    return false;
+    return ParseLineResult::FAILURE;
 
   GeoPoint location;
 
   // Get fields
   n_params = ExtractParameters(line, ctemp, params, max_params, true);
   if (n_params < 6)
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Latitude (e.g. 51:15.900N)
   if (!ParseAngle(params[1], location.latitude, true))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
   if (!ParseAngle(params[2], location.longitude, false))
-    return false;
+    return ParseLineResult::FAILURE;
+
   location.Normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
@@ -238,14 +239,14 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))
-    return false;
+    return ParseLineResult::FAILURE;
   new_waypoint.name=params[5];
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
   if (!ParseAltitude(params[3], new_waypoint.elevation) &&
       !CheckAltitude(new_waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
@@ -258,5 +259,5 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   ParseFlags(params[4], new_waypoint);
 
   waypoints.Append(new_waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }

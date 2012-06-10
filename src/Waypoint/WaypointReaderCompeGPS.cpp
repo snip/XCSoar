@@ -141,7 +141,7 @@ ParseAltitude(const TCHAR *&src, fixed &dest)
   return true;
 }
 
-bool
+WaypointReaderBase::ParseLineResult
 WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
                                   Waypoints &waypoints)
 {
@@ -159,17 +159,17 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Skip projection and file encoding information
   if (*line == _T('G') || *line == _T('B'))
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Check for format: UTM or LatLon
   if (*line == _T('U') && _tcsstr(line, _T("U  0")) == line) {
     is_utm = true;
-    return true;
+    return ParseLineResult::IGNORED;
   }
 
   // Skip non-waypoint lines
   if (*line != _T('W'))
-    return true;
+    return ParseLineResult::IGNORED;
 
   // Skip W indicator and whitespace
   line++;
@@ -180,11 +180,11 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   const TCHAR *name = line;
   const TCHAR *space = _tcsstr(line, _T(" "));
   if (space == NULL)
-    return false;
+    return ParseLineResult::FAILURE;
 
   unsigned name_length = space - line;
   if (name_length == 0)
-    return false;
+    return ParseLineResult::FAILURE;
 
   line = space;
   while (*line == _T(' '))
@@ -194,7 +194,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
   if ((!is_utm && !ParseLocation(line, location)) ||
       (is_utm && !ParseLocationUTM(line, location)))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Skip whitespace
   while (*line == _T(' '))
@@ -203,14 +203,14 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Skip unused date field
   line = _tcsstr(line, _T(" "));
   if (line == NULL)
-    return false;
+    return ParseLineResult::FAILURE;
 
   line++;
 
   // Skip unused time field
   line = _tcsstr(line, _T(" "));
   if (line == NULL)
-    return false;
+    return ParseLineResult::FAILURE;
 
   line++;
 
@@ -223,7 +223,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Parse altitude
   if (!ParseAltitude(line, waypoint.elevation) &&
       !CheckAltitude(waypoint))
-    return false;
+    return ParseLineResult::FAILURE;
 
   // Skip whitespace
   while (*line == _T(' '))
@@ -233,7 +233,7 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   waypoint.comment.assign(line);
 
   waypoints.Append(waypoint);
-  return true;
+  return ParseLineResult::OKAY;
 }
 
 bool

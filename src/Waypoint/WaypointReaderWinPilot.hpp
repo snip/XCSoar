@@ -39,8 +39,8 @@ public:
     :WaypointReaderBase(file_name, _file_num, _compressed) {}
 
 protected:
-  bool ParseLine(const TCHAR* line, const unsigned linenum,
-                 Waypoints &way_points);
+  ParseLineResult ParseLine(const TCHAR* line, const unsigned linenum,
+                            Waypoints &way_points);
 };
 
 #endif
