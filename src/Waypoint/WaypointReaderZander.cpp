@@ -148,7 +148,7 @@ ParseFlagsFromDescription(const TCHAR* src, Waypoint &dest)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &way_points)
+                                Waypoint &waypoint)
 {
   // If (end-of-file or comment)
   if (line[0] == '\0' ||
@@ -163,41 +163,37 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
   if (len < 34)
     return ParseLineResult::FAILURE;
 
-  GeoPoint location;
-
   // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!ParseAngle(line + 13, location.latitude, true))
+  if (!ParseAngle(line + 13, waypoint.location.latitude, true))
     return ParseLineResult::FAILURE;
 
   // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!ParseAngle(line + 21, location.longitude, false))
+  if (!ParseAngle(line + 21, waypoint.location.longitude, false))
     return ParseLineResult::FAILURE;
 
-  location.Normalize(); // ensure longitude is within -180:180
+  waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
+  waypoint.file_num = file_num;
+  waypoint.original_id = 0;
 
   // Name (Characters 0-12)
-  if (!ParseString(line, new_waypoint.name, 12))
+  if (!ParseString(line, waypoint.name, 12))
     return ParseLineResult::FAILURE;
 
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
-  if (!ParseAltitude(line + 30, new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+  if (!ParseAltitude(line + 30, waypoint.elevation) &&
+      !CheckAltitude(waypoint))
     return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
   if (len > 35)
-    ParseString(line + 35, new_waypoint.comment, 9);
+    ParseString(line + 35, waypoint.comment, 9);
 
   // Flags (Characters 45-49)
-  if (len < 46 || !ParseFlags(line + 45, new_waypoint))
-    if (len < 36 || !ParseFlagsFromDescription(line + 35, new_waypoint))
-      new_waypoint.flags.turn_point = true;
+  if (len < 46 || !ParseFlags(line + 45, waypoint))
+    if (len < 36 || !ParseFlagsFromDescription(line + 35, waypoint))
+      waypoint.flags.turn_point = true;
 
-  way_points.Append(new_waypoint);
   return ParseLineResult::OKAY;
 }

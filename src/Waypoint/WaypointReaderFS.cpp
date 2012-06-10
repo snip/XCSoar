@@ -147,7 +147,7 @@ ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
-                              Waypoints &way_points)
+                              Waypoint &waypoint)
 {
   //$FormatGEO
   //ACONCAGU  S 32 39 12.00    W 070 00 42.00  6962  Aconcagua
@@ -181,27 +181,24 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
   if (len < (is_utm ? 39 : 47))
     return ParseLineResult::FAILURE;
 
-  GeoPoint location;
-  if ((!is_utm && !ParseLocation(line + 10, location)) ||
-      (is_utm && !ParseLocationUTM(line + 9, location)))
+  if ((!is_utm && !ParseLocation(line + 10, waypoint.location)) ||
+      (is_utm && !ParseLocationUTM(line + 9, waypoint.location)))
     return ParseLineResult::FAILURE;
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
+  waypoint.file_num = file_num;
+  waypoint.original_id = 0;
 
-  if (!ParseString(line, new_waypoint.name, 8))
+  if (!ParseString(line, waypoint.name, 8))
     return ParseLineResult::FAILURE;
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+  if (!ParseAltitude(line + (is_utm ? 32 : 41), waypoint.elevation) &&
+      !CheckAltitude(waypoint))
     return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
-    ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
+    ParseString(line + (is_utm ? 38 : 47), waypoint.comment);
 
-  way_points.Append(new_waypoint);
   return ParseLineResult::OKAY;
 }
 

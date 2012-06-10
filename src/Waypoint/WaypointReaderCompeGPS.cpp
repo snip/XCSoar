@@ -143,7 +143,7 @@ ParseAltitude(const TCHAR *&src, fixed &dest)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
-                                  Waypoints &waypoints)
+                                  Waypoint &waypoint)
 {
   /*
    * G  WGS 84
@@ -191,9 +191,8 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
     line++;
 
   // Parse location
-  GeoPoint location;
-  if ((!is_utm && !ParseLocation(line, location)) ||
-      (is_utm && !ParseLocationUTM(line, location)))
+  if ((!is_utm && !ParseLocation(line, waypoint.location)) ||
+      (is_utm && !ParseLocationUTM(line, waypoint.location)))
     return ParseLineResult::FAILURE;
 
   // Skip whitespace
@@ -215,7 +214,6 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   line++;
 
   // Create new waypoint instance
-  Waypoint waypoint(location);
   waypoint.file_num = file_num;
   waypoint.original_id = 0;
   waypoint.name.assign(name, name_length);
@@ -232,7 +230,6 @@ WaypointReaderCompeGPS::ParseLine(const TCHAR* line, const unsigned linenum,
   // Parse waypoint name
   waypoint.comment.assign(line);
 
-  waypoints.Append(waypoint);
   return ParseLineResult::OKAY;
 }
 

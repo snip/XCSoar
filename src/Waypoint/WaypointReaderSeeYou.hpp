@@ -44,7 +44,7 @@ protected:
    * @see http://data.naviter.si/docs/cup_format.pdf
    */
   ParseLineResult ParseLine(const TCHAR* line, const unsigned linenum,
-                            Waypoints &way_points);
+                            Waypoint &waypoint);
 };
 
 #endif

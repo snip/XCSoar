@@ -160,7 +160,7 @@ ParseStyle(const TCHAR* src, Waypoint::Type &type)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
-                                Waypoints &waypoints)
+                                Waypoint &waypoint)
 {
   enum {
     iName = 0,
@@ -211,51 +211,49 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
       iLongitude >= n_params)
     return ParseLineResult::FAILURE;
 
-  Waypoint new_waypoint;
-
   // Latitude (e.g. 5115.900N)
-  if (!ParseAngle(params[iLatitude], new_waypoint.location.latitude, true))
+  if (!ParseAngle(params[iLatitude], waypoint.location.latitude, true))
     return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
-  if (!ParseAngle(params[iLongitude], new_waypoint.location.longitude, false))
+  if (!ParseAngle(params[iLongitude], waypoint.location.longitude, false))
     return ParseLineResult::FAILURE;
 
-  new_waypoint.location.Normalize(); // ensure longitude is within -180:180
+  waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = 0;
+  waypoint.file_num = file_num;
+  waypoint.original_id = 0;
 
   // Name (e.g. "Some Turnpoint")
   if (*params[iName] == _T('\0'))
     return ParseLineResult::FAILURE;
 
-  new_waypoint.name = params[iName];
+  waypoint.name = params[iName];
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
   if ((iElevation >= n_params ||
-      !ParseAltitude(params[iElevation], new_waypoint.elevation)) &&
-      !CheckAltitude(new_waypoint))
+      !ParseAltitude(params[iElevation], waypoint.elevation)) &&
+      !CheckAltitude(waypoint))
     return ParseLineResult::FAILURE;
 
   // Style (e.g. 5)
   if (iStyle < n_params)
-    ParseStyle(params[iStyle], new_waypoint.type);
+    ParseStyle(params[iStyle], waypoint.type);
 
-  new_waypoint.flags.turn_point = true;
+  waypoint.flags.turn_point = true;
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
-  if (new_waypoint.IsLandable()) {
+  if (waypoint.IsLandable()) {
     if (iFrequency < n_params)
-      new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
+      waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
     fixed rwlen = fixed_minus_one;
     if (iRWLen < n_params && ParseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
-      new_waypoint.runway.SetLength(uround(rwlen));
+      waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
       TCHAR *end;
@@ -266,13 +264,12 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
       else if (direction == 360)
         direction = 0;
       if (direction >= 0)
-        new_waypoint.runway.SetDirectionDegrees(direction);
+        waypoint.runway.SetDirectionDegrees(direction);
     }
   }
 
   if (iDescription < n_params)
-    new_waypoint.comment = params[iDescription];
+    waypoint.comment = params[iDescription];
 
-  waypoints.Append(new_waypoint);
   return ParseLineResult::OKAY;
 }

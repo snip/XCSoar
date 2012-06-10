@@ -67,7 +67,7 @@ ParseString(const TCHAR *src, tstring &dest)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
-                             Waypoints &way_points)
+                             Waypoint &waypoint)
 {
   if (line[0] == '\0')
     return ParseLineResult::IGNORED;
@@ -92,35 +92,32 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
   if (n_params < 15)
     return ParseLineResult::FAILURE;
 
-  GeoPoint location;
   // Latitude (e.g. 5115.900N)
-  if (!ParseAngle(params[2], location.latitude))
+  if (!ParseAngle(params[2], waypoint.location.latitude))
     return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
-  if (!ParseAngle(params[3], location.longitude))
+  if (!ParseAngle(params[3], waypoint.location.longitude))
     return ParseLineResult::FAILURE;
 
-  location.Normalize(); // ensure longitude is within -180:180
+  waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
+  waypoint.file_num = file_num;
 
   long value;
-  new_waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
+  waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
 
-  if (!ParseString(params[1], new_waypoint.name))
+  if (!ParseString(params[1], waypoint.name))
     return ParseLineResult::FAILURE;
 
   if (ParseNumber(params[14], value) && value != -777)
-    new_waypoint.elevation = Units::ToSysUnit(fixed(value), Unit::FEET);
-  else if (!CheckAltitude(new_waypoint))
+    waypoint.elevation = Units::ToSysUnit(fixed(value), Unit::FEET);
+  else if (!CheckAltitude(waypoint))
     return ParseLineResult::FAILURE;
 
   // Description (Characters 35-44)
-  ParseString(params[11], new_waypoint.comment);
+  ParseString(params[11], waypoint.comment);
 
-  way_points.Append(new_waypoint);
   return ParseLineResult::OKAY;
 }
 

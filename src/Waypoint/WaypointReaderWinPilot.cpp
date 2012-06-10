@@ -188,7 +188,7 @@ ParseFlags(const TCHAR* src, Waypoint &dest)
 
 WaypointReaderBase::ParseLineResult
 WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
-                                  Waypoints &waypoints)
+                                  Waypoint &waypoint)
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
@@ -216,48 +216,44 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     /* line too long for buffer */
     return ParseLineResult::FAILURE;
 
-  GeoPoint location;
-
   // Get fields
   n_params = ExtractParameters(line, ctemp, params, max_params, true);
   if (n_params < 6)
     return ParseLineResult::FAILURE;
 
   // Latitude (e.g. 51:15.900N)
-  if (!ParseAngle(params[1], location.latitude, true))
+  if (!ParseAngle(params[1], waypoint.location.latitude, true))
     return ParseLineResult::FAILURE;
 
   // Longitude (e.g. 00715.900W)
-  if (!ParseAngle(params[2], location.longitude, false))
+  if (!ParseAngle(params[2], waypoint.location.longitude, false))
     return ParseLineResult::FAILURE;
 
-  location.Normalize(); // ensure longitude is within -180:180
+  waypoint.location.Normalize(); // ensure longitude is within -180:180
 
-  Waypoint new_waypoint(location);
-  new_waypoint.file_num = file_num;
-  new_waypoint.original_id = _tcstoul(params[0], NULL, 0);
+  waypoint.file_num = file_num;
+  waypoint.original_id = _tcstoul(params[0], NULL, 0);
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))
     return ParseLineResult::FAILURE;
-  new_waypoint.name=params[5];
+  waypoint.name=params[5];
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  if (!ParseAltitude(params[3], new_waypoint.elevation) &&
-      !CheckAltitude(new_waypoint))
+  if (!ParseAltitude(params[3], waypoint.elevation) &&
+      !CheckAltitude(waypoint))
     return ParseLineResult::FAILURE;
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
-    new_waypoint.comment=params[6];
+    waypoint.comment=params[6];
     if (welt2000_format)
-      ParseRunwayDirection(params[6], new_waypoint.runway);
+      ParseRunwayDirection(params[6], waypoint.runway);
   }
 
   // Waypoint Flags (e.g. AT)
-  ParseFlags(params[4], new_waypoint);
+  ParseFlags(params[4], waypoint);
 
-  waypoints.Append(new_waypoint);
   return ParseLineResult::OKAY;
 }

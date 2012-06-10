@@ -84,7 +84,7 @@ protected:
    * parsing error occured
    */
   virtual ParseLineResult ParseLine(const TCHAR* line, unsigned linenum,
-                                    Waypoints &way_points) = 0;
+                                    Waypoint &waypoint) = 0;
 
 public:
   // Helper functions
