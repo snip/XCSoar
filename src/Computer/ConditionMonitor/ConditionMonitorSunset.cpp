@@ -37,7 +37,7 @@ ConditionMonitorSunset::CheckCondition(const NMEAInfo &basic,
                                        const ComputerSettings &settings)
 {
   if (!basic.location_available ||
-      !calculated.flight.flying || HaveCondorDevice() ||
+      !calculated.flight.flying || Devices::HaveCondorDevice() ||
       !calculated.task_stats.task_valid)
     return false;
 

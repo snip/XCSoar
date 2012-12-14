@@ -413,7 +413,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   }
 
   if (_tcsstr(OutBuffer, _T("$(CheckVega)"))) {
-    if (devVarioFindVega()== NULL)
+    if (Devices::FindVega() == NULL)
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckVega)"), _T(""), Size);
   }

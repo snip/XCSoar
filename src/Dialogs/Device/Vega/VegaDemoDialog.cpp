@@ -52,7 +52,7 @@ VegaWriteDemo()
             iround(VegaDemoV * 10));
 
   PopupOperationEnvironment env;
-  VarioWriteNMEA(dbuf, env);
+  Devices::WriteNMEAtoVega(dbuf, env);
 }
 
 static void
@@ -117,8 +117,8 @@ dlgVegaDemoShowModal()
   if (!wf) return;
 
   PopupOperationEnvironment env;
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,3"), env);
+  Devices::WriteNMEAtoVega(_T("PDVSC,S,DemoMode,0"), env);
+  Devices::WriteNMEAtoVega(_T("PDVSC,S,DemoMode,3"), env);
 
   LoadFormProperty(*wf, _T("prpVegaDemoW"), UnitGroup::VERTICAL_SPEED, VegaDemoW);
   LoadFormProperty(*wf, _T("prpVegaDemoV"), UnitGroup::VERTICAL_SPEED, VegaDemoV);
@@ -128,5 +128,5 @@ dlgVegaDemoShowModal()
   delete wf;
 
   // deactivate demo.
-  VarioWriteNMEA(_T("PDVSC,S,DemoMode,0"), env);
+  Devices::WriteNMEAtoVega(_T("PDVSC,S,DemoMode,0"), env);
 }

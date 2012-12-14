@@ -183,7 +183,7 @@ SettingsLeave(const UISettings &old_ui_settings)
   }
 
   if (DevicePortChanged)
-    devRestart();
+    Devices::Restart();
 
   const UISettings &ui_settings = CommonInterface::GetUISettings();
 

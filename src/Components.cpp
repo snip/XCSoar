@@ -419,7 +419,7 @@ XCSoarInterface::Startup()
 
   // Start the device thread(s)
   operation.SetText(_("Starting devices"));
-  devStartup();
+  Devices::Startup();
 
 /*
   -- Reset polar in case devices need the data
@@ -616,7 +616,7 @@ XCSoarInterface::Shutdown()
   delete marks;
 
   // Close any device connections
-  devShutdown();
+  Devices::Shutdown();
 
   NMEALogger::Shutdown();
 

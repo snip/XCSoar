@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DEVICE_HPP
-#define XCSOAR_DEVICE_DEVICE_HPP
+#ifndef XCSOAR_DEVICE_DEVICES_HPP
+#define XCSOAR_DEVICE_DEVICES_HPP
 
 #include <tchar.h>
 #include <stdio.h>
@@ -32,20 +32,22 @@ class Mutex;
 class DeviceDescriptor;
 class OperationEnvironment;
 
-void
-VarioWriteNMEA(const TCHAR *Text, OperationEnvironment &env);
+namespace Devices {
 
-DeviceDescriptor *devVarioFindVega();
+void WriteNMEAtoVega(const TCHAR *Text, OperationEnvironment &env);
+
+DeviceDescriptor *FindVega();
 
 /**
  * Returns true if at least one of the connected device is a Condor
  * flight simulator.
  */
-bool
-HaveCondorDevice();
+bool HaveCondorDevice();
 
-void devStartup();
-void devShutdown();
-void devRestart();
+void Startup();
+void Shutdown();
+void Restart();
+
+}
 
 #endif

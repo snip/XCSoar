@@ -44,7 +44,7 @@ InputEvents::eventSendNMEA(const TCHAR *misc)
 {
   if (misc != NULL) {
     PopupOperationEnvironment env;
-    VarioWriteNMEA(misc, env);
+    Devices::WriteNMEAtoVega(misc, env);
   }
 }
 

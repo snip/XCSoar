@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 static void
-devInitOne(DeviceDescriptor &device)
+InitOne(DeviceDescriptor &device)
 {
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
@@ -84,7 +84,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 }
 
 void
-devStartup()
+Devices::Startup()
 {
   LogFormat("Register serial devices");
 
@@ -112,7 +112,7 @@ devStartup()
     }
 
     device.SetConfig(config);
-    devInitOne(*device_list[i]);
+    InitOne(*device_list[i]);
   }
 
   if (none_available) {
@@ -127,13 +127,13 @@ devStartup()
 
     DeviceDescriptor &device = *device_list[0];
     device.SetConfig(config);
-    devInitOne(device);
+    InitOne(device);
 #endif
   }
 }
 
 bool
-HaveCondorDevice()
+Devices::HaveCondorDevice()
 {
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (device_list[i]->IsCondor())
@@ -143,7 +143,7 @@ HaveCondorDevice()
 }
 
 void
-VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
+Devices::WriteNMEAtoVega(const TCHAR *text, OperationEnvironment &env)
 {
   for (int i = 0; i < NUMDEV; i++)
     if (device_list[i]->IsVega())
@@ -151,7 +151,7 @@ VarioWriteNMEA(const TCHAR *text, OperationEnvironment &env)
 }
 
 DeviceDescriptor *
-devVarioFindVega()
+Devices::FindVega()
 {
   for (int i = 0; i < NUMDEV; i++)
     if (device_list[i]->IsVega())
@@ -161,24 +161,20 @@ devVarioFindVega()
 }
 
 void
-devShutdown()
+Devices::Shutdown()
 {
-  int i;
-
   // Stop COM devices
   LogFormat("Stop COM devices");
 
-  for (i = 0; i < NUMDEV; i++) {
+  for (int i = 0; i < NUMDEV; i++)
     device_list[i]->Close();
-  }
 }
 
 void
-devRestart()
+Devices::Restart()
 {
   LogFormat("RestartCommPorts");
 
-  devShutdown();
-
-  devStartup();
+  Shutdown();
+  Startup();
 }
