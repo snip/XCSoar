@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Device/Driver.hpp"
 #include "Profile/DeviceConfig.hpp"
 
 static Device *

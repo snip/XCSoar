@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_FLYTEC_DEVICE_HPP
 
 #include "tchar.h"
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 
 class Port;
 struct NMEAInfo;

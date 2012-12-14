@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port/Port.hpp"

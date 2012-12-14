@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 
 Device::~Device() {}
 

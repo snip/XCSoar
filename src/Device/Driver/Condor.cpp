@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Condor.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Units/System.hpp"
 #include "Device/Parser.hpp"
 #include "NMEA/Checksum.hpp"

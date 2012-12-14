@@ -29,7 +29,7 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 #include "Compiler.h"
 #include "tchar.h"
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/SettingsMap.hpp"
 #include "Thread/Mutex.hpp"
 

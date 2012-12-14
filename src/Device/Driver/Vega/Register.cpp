@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Vega.hpp"
 #include "Internal.hpp"
+#include "Device/Driver.hpp"
 
 static Device *
 VegaCreateOnPort(const DeviceConfig &config, Port &com_port)

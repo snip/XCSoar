@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/WesterboerVW921.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "NMEA/Info.hpp"
 #include "Util/FifoBuffer.hpp"
 #include "OS/ByteOrder.hpp"

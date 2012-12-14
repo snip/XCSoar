@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/CAI302.hpp"
+#include "Device/Driver.hpp"
 #include "Internal.hpp"
 
 static Device *

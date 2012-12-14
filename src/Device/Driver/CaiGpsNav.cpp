@@ -30,6 +30,7 @@ Copyright_License {
 
 #include "Device/Driver/CaiGpsNav.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Operation/Operation.hpp"
 

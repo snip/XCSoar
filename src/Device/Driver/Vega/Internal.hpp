@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_VEGA_INTERNAL_HPP
 #define XCSOAR_VEGA_INTERNAL_HPP
 
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/SettingsMap.hpp"
 #include "Thread/Mutex.hpp"
 #include "Volatile.hpp"

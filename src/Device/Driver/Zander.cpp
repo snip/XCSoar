@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Checksum.hpp"

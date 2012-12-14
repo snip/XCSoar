@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "GTAltimeter.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "NMEA/InputLine.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Checksum.hpp"

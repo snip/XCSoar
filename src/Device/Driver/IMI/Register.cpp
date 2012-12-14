@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/IMI.hpp"
 #include "Internal.hpp"
+#include "Device/Driver.hpp"
 
 static Device *
 IMICreateOnPort(const DeviceConfig &config, Port &com_port)

@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
 
 #include "Protocol.hpp"
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/SettingsMap.hpp"
 #include "Thread/Mutex.hpp"
 

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/AltairPro.hpp"
+#include "Device/Device.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Internal.hpp"
 #include "Device/Port/Port.hpp"

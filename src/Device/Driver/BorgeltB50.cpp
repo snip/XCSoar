@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver/CAI302/PocketNav.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
 #include "NMEA/Checksum.hpp"

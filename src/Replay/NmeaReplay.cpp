@@ -25,6 +25,7 @@
 #include "IO/LineReader.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Register.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "OS/Clock.hpp"

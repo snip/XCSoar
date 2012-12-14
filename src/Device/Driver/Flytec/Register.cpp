@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Flytec.hpp"
 #include "Device.hpp"
+#include "Device/Driver.hpp"
 
 static Device *
 FlytecCreateOnPort(const DeviceConfig &config, Port &com_port)

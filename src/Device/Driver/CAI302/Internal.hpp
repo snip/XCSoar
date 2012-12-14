@@ -24,11 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_INTERNAL_HPP
 #define XCSOAR_CAI302_INTERNAL_HPP
 
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Protocol.hpp"
 
 #include <vector>
 #include <stdint.h>
+
+struct DeviceConfig;
 
 /** 
  * Device driver for Cambridge Aero Instruments 302 

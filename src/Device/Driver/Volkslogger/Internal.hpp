@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_INTERNAL_HPP
 #define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_INTERNAL_HPP
 
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
+
+class Port;
 
 class VolksloggerDevice : public AbstractDevice {
 private:

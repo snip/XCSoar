@@ -30,7 +30,7 @@
 #include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "LocalPath.hpp"
 #include "UIGlobals.hpp"
 #include "Operation/Operation.hpp"

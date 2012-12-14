@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Port/Port.hpp"
 #include "Device/Port/ConfiguredPort.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Operation/ConsoleOperationEnvironment.hpp"

@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_IMI_INTERNAL_HPP
 #define XCSOAR_IMI_INTERNAL_HPP
 
-#include "Device/Driver.hpp"
+#include "Device/Device.hpp"
+
+class Port;
 
 /**
  * Device driver for IMI ERIXX

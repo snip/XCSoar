@@ -767,7 +767,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \
 	\
-	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Device.cpp \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/List.cpp \

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Generic.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 
 class GenericDevice : public AbstractDevice {
 };

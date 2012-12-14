@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver.hpp"
+#include "Device/Device.hpp"
 #include "Device/Port/Port.hpp"
 #include "Units/System.hpp"
 #include "Atmosphere/Temperature.hpp"
