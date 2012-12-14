@@ -26,7 +26,7 @@ Copyright_License {
 #include "Dialogs/XML.hpp"
 #include "UIGlobals.hpp"
 #include "Units/Units.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/DataField/Boolean.hpp"

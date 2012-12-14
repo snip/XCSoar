@@ -26,7 +26,7 @@
 #include "Dialogs/Message.hpp"
 #include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"

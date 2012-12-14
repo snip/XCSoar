@@ -24,7 +24,7 @@ Copyright_License {
 */
 
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Util/CharUtil.hpp"
 #include "Geo/Geoid.hpp"
 #include "NMEA/Info.hpp"

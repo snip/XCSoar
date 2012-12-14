@@ -25,7 +25,7 @@ Copyright_License {
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Logger/Settings.hpp"
 #include "Plane/Plane.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"

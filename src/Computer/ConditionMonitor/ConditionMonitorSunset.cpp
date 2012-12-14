@@ -25,7 +25,7 @@ Copyright_License {
 #include "ConditionMonitorSunset.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Language/Language.hpp"
 #include "Message.hpp"
 #include "Math/SunEphemeris.hpp"

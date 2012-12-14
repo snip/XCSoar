@@ -54,7 +54,7 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Markers/Markers.hpp"
 #include "Markers/ProtectedMarkers.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Audio/VarioGlue.hpp"

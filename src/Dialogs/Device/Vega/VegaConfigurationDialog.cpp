@@ -44,7 +44,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Driver/Vega/Internal.hpp"
 #include "Profile/Profile.hpp"

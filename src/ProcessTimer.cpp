@@ -26,7 +26,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Input/InputQueue.hpp"
 #include "Input/InputEvents.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Device/All.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"

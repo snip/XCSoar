@@ -36,7 +36,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Pages.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/Macros.hpp"

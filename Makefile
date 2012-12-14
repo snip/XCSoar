@@ -771,7 +771,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Declaration.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/List.cpp \
-	$(SRC)/Device/device.cpp \
+	$(SRC)/Device/Devices.cpp \
 	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/Dispatcher.cpp \

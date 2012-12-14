@@ -28,7 +28,7 @@ Copyright_License {
 #include "Device/Driver/FLARM/Device.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "OS/PathName.hpp"
 #include "OS/Args.hpp"

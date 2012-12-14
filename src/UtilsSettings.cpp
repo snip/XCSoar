@@ -33,7 +33,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Dialogs/Dialogs.h"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Message.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Components.hpp"

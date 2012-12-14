@@ -26,7 +26,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
-#include "Device/device.hpp"
+#include "Device/Devices.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Input/InputEvents.hpp"
 #include "OS/PathName.hpp"
