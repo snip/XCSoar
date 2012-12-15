@@ -249,23 +249,23 @@ void
 DeviceBlackboard::SetBallast(fixed fraction, fixed overload,
                              OperationEnvironment &env)
 {
-  AllDevicesPutBallast(fraction, overload, env);
+  Devices::PutBallast(fraction, overload, env);
 }
 
 void
 DeviceBlackboard::SetBugs(fixed bugs, OperationEnvironment &env)
 {
-  AllDevicesPutBugs(bugs, env);
+  Devices::PutBugs(bugs, env);
 }
 
 void
 DeviceBlackboard::SetQNH(AtmosphericPressure qnh, OperationEnvironment &env)
 {
-  AllDevicesPutQNH(qnh, env);
+  Devices::PutQNH(qnh, env);
 }
 
 void
 DeviceBlackboard::SetMC(fixed mc, OperationEnvironment &env)
 {
-  AllDevicesPutMacCready(mc, env);
+  Devices::PutMacCready(mc, env);
 }

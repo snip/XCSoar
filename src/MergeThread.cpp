@@ -73,7 +73,7 @@ MergeThread::Tick()
     const MoreData &basic = device_blackboard.Basic();
 
     /* call Driver::OnSensorUpdate() on all devices */
-    AllDevicesNotifySensorUpdate(basic);
+    Devices::NotifySensorUpdate(basic);
 
     /* trigger update if gps has become available or dropped out */
     gps_updated = last_any.location_available != basic.location_available;

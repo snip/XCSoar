@@ -36,37 +36,23 @@ struct DerivedInfo;
 class OperationEnvironment;
 class AtmosphericPressure;
 
-void
-devTick(const DerivedInfo &calculated);
+namespace Devices
+{
 
-void
-AllDevicesAutoReopen(OperationEnvironment &env);
+void Tick(const DerivedInfo &calculated);
 
-void
-AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env);
+void AutoReopen(OperationEnvironment &env);
 
-void
-AllDevicesPutBugs(fixed bugs, OperationEnvironment &env);
+void PutMacCready(fixed mac_cready, OperationEnvironment &env);
+void PutBugs(fixed bugs, OperationEnvironment &env);
+void PutBallast(fixed fraction, fixed overload, OperationEnvironment &env);
+void PutVolume(unsigned volume, OperationEnvironment &env);
+void PutActiveFrequency(RadioFrequency frequency, OperationEnvironment &env);
+void PutStandbyFrequency(RadioFrequency frequency, OperationEnvironment &env);
+void PutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
 
-void
-AllDevicesPutBallast(fixed fraction, fixed overload,
-                     OperationEnvironment &env);
+void NotifySensorUpdate(const MoreData &basic);
 
-void
-AllDevicesPutVolume(unsigned volume, OperationEnvironment &env);
-
-void
-AllDevicesPutActiveFrequency(RadioFrequency frequency,
-                             OperationEnvironment &env);
-
-void
-AllDevicesPutStandbyFrequency(RadioFrequency frequency,
-                              OperationEnvironment &env);
-
-void
-AllDevicesPutQNH(const AtmosphericPressure &pres, OperationEnvironment &env);
-
-void
-AllDevicesNotifySensorUpdate(const MoreData &basic);
+}
 
 #endif

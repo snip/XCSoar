@@ -198,7 +198,7 @@ QNHProcessTimer()
     settings_computer.pressure_available = calculated.pressure_available;
 
     MessageOperationEnvironment env;
-    AllDevicesPutQNH(settings_computer.pressure, env);
+    Devices::PutQNH(settings_computer.pressure, env);
   }
 }
 
@@ -319,7 +319,7 @@ ConnectionProcessTimer()
   /* this OperationEnvironment instance must be persistent, because
      DeviceDescriptor::Open() is asynchronous */
   static QuietOperationEnvironment env;
-  AllDevicesAutoReopen(env);
+  Devices::AutoReopen(env);
 }
 
 void
@@ -329,7 +329,7 @@ ProcessTimer()
 
   if (!is_simulator()) {
     // now check GPS status
-    devTick(CommonInterface::Calculated());
+    Devices::Tick(CommonInterface::Calculated());
 
     // also service replay logger
     if (replay && replay->Update()) {

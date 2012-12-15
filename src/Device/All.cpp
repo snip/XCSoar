@@ -31,7 +31,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-devTick(const DerivedInfo &calculated)
+Devices::Tick(const DerivedInfo &calculated)
 {
   int i;
 
@@ -42,7 +42,7 @@ devTick(const DerivedInfo &calculated)
 }
 
 void
-AllDevicesAutoReopen(OperationEnvironment &env)
+Devices::AutoReopen(OperationEnvironment &env)
 {
   for (unsigned i = 0; i < NUMDEV; i++) {
     DeviceDescriptor &d = *device_list[i];
@@ -51,7 +51,7 @@ AllDevicesAutoReopen(OperationEnvironment &env)
 }
 
 void
-AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
+Devices::PutMacCready(fixed mac_cready, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
@@ -61,7 +61,7 @@ AllDevicesPutMacCready(fixed mac_cready, OperationEnvironment &env)
 }
 
 void
-AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
+Devices::PutBugs(fixed bugs, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
@@ -71,7 +71,7 @@ AllDevicesPutBugs(fixed bugs, OperationEnvironment &env)
 }
 
 void
-AllDevicesPutBallast(fixed fraction, fixed overload,
+Devices::PutBallast(fixed fraction, fixed overload,
                      OperationEnvironment &env)
 {
   if (is_simulator())
@@ -82,7 +82,7 @@ AllDevicesPutBallast(fixed fraction, fixed overload,
 }
 
 void
-AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
+Devices::PutVolume(unsigned volume, OperationEnvironment &env)
 {
   if (is_simulator())
     return;
@@ -92,7 +92,7 @@ AllDevicesPutVolume(unsigned volume, OperationEnvironment &env)
 }
 
 void
-AllDevicesPutActiveFrequency(RadioFrequency frequency,
+Devices::PutActiveFrequency(RadioFrequency frequency,
                              OperationEnvironment &env)
 {
   if (is_simulator())
@@ -103,7 +103,7 @@ AllDevicesPutActiveFrequency(RadioFrequency frequency,
 }
 
 void
-AllDevicesPutStandbyFrequency(RadioFrequency frequency,
+Devices::PutStandbyFrequency(RadioFrequency frequency,
                               OperationEnvironment &env)
 {
   if (is_simulator())
@@ -114,7 +114,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency,
 }
 
 void
-AllDevicesPutQNH(const AtmosphericPressure &pres,
+Devices::PutQNH(const AtmosphericPressure &pres,
                  OperationEnvironment &env)
 {
   if (is_simulator())
@@ -125,7 +125,7 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
 }
 
 void
-AllDevicesNotifySensorUpdate(const MoreData &basic)
+Devices::NotifySensorUpdate(const MoreData &basic)
 {
   if (is_simulator())
     return;
