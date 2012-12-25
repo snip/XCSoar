@@ -22,12 +22,7 @@ Copyright_License {
 */
 
 #include "DebugReplay.hpp"
-#include "DebugReplayIGC.hpp"
-#include "DebugReplayNMEA.hpp"
-#include "OS/Args.hpp"
 #include "IO/FileLineReader.hpp"
-#include "OS/PathName.hpp"
-#include "Device/Register.hpp"
 #include "ComputerSettings.hpp"
 
 DebugReplay::DebugReplay(NLineReader *_reader)
@@ -70,40 +65,4 @@ DebugReplay::Compute()
   flying_computer.Compute(glide_polar.GetVTakeoff(),
                           computed_basic, calculated,
                           calculated.flight);
-}
-
-DebugReplay *
-CreateDebugReplay(Args &args)
-{
-  if (!args.IsEmpty() && MatchesExtension(args.PeekNext(), ".igc")) {
-    const char *input_file = args.ExpectNext();
-
-    FileLineReaderA *reader = new FileLineReaderA(input_file);
-    if (reader->error()) {
-      delete reader;
-      fprintf(stderr, "Failed to open %s\n", input_file);
-      return NULL;
-    }
-
-    return new DebugReplayIGC(reader);
-  }
-
-  const tstring driver_name = args.ExpectNextT();
-
-  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
-  if (driver == NULL) {
-    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
-    return NULL;
-  }
-
-  const char *input_file = args.ExpectNext();
-
-  FileLineReaderA *reader = new FileLineReaderA(input_file);
-  if (reader->error()) {
-    delete reader;
-    fprintf(stderr, "Failed to open %s\n", input_file);
-    return NULL;
-  }
-
-  return new DebugReplayNMEA(reader, driver);
 }

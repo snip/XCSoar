@@ -771,6 +771,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/DebugReplayIGC.cpp \
 	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp \
+	$(TEST_SRC_DIR)/DebugReplayCreator.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
 DEBUG_REPLAY_LDADD = \
 	$(DRIVER_LDADD) \
