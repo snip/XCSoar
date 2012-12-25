@@ -719,25 +719,36 @@ endif
 
 DEBUG_PROGRAMS = $(call name-to-bin,$(DEBUG_PROGRAM_NAMES))
 
-DEBUG_REPLAY_SOURCES = \
+DEBUG_REPLAY_IGC_SOURCES = \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(TEST_SRC_DIR)/DebugReplayIGC.cpp
+
+DEBUG_REPLAY_NMEA_SOURCES = \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
-	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/Operation/Operation.cpp \
+	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
+	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp
+
+DEBUG_REPLAY_COMMON_SOURCES = \
 	$(SRC)/Units/Descriptor.cpp \
 	$(SRC)/Units/System.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningConfig.cpp \
-	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
 	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/SwitchState.cpp \
 	$(SRC)/NMEA/Attitude.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/VarioInfo.cpp \
 	$(SRC)/NMEA/ClimbInfo.cpp \
@@ -746,9 +757,6 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/NMEA/ThermalBand.cpp \
 	$(SRC)/NMEA/ThermalLocator.cpp \
 	$(SRC)/NMEA/FlyingState.cpp \
-	$(SRC)/Operation/Operation.cpp \
-	$(SRC)/Operation/ProxyOperationEnvironment.cpp \
-	$(SRC)/Operation/NoCancelOperationEnvironment.cpp \
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
@@ -767,12 +775,14 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Task/Stats/ElementStat.cpp \
 	$(SRC)/Engine/Task/Stats/DistanceStat.cpp \
 	$(SRC)/Engine/Task/Stats/TaskVario.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeGeoid.cpp \
-	$(TEST_SRC_DIR)/DebugReplayIGC.cpp \
-	$(TEST_SRC_DIR)/DebugReplayNMEA.cpp \
-	$(TEST_SRC_DIR)/DebugReplayCreator.cpp \
 	$(TEST_SRC_DIR)/DebugReplay.cpp
+
+DEBUG_REPLAY_SOURCES = \
+	$(DEBUG_REPLAY_IGC_SOURCES) \
+	$(DEBUG_REPLAY_NMEA_SOURCES) \
+	$(DEBUG_REPLAY_COMMON_SOURCES) \
+	$(TEST_SRC_DIR)/DebugReplayCreator.cpp
+
 DEBUG_REPLAY_LDADD = \
 	$(DRIVER_LDADD) \
 	$(IO_LIBS) \
