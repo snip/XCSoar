@@ -24,7 +24,6 @@
 #include "Contest/ContestManager.hpp"
 #include "OS/Args.hpp"
 #include "Computer/CirclingComputer.hpp"
-#include "DebugReplay.hpp"
 #include "Util/Macros.hpp"
 #include "IO/TextWriter.hpp"
 #include "Formatter/TimeFormatter.hpp"
@@ -33,6 +32,13 @@
 #include "FlightPhaseDetector.hpp"
 #include "FlightPhaseJSON.hpp"
 #include "ComputerSettings.hpp"
+
+#ifdef IGC_ONLY
+#include "DebugReplayIGC.hpp"
+#include "IO/FileLineReader.hpp"
+#else
+#include "DebugReplay.hpp"
+#endif
 
 struct Result {
   BrokenDateTime takeoff_time, release_time, landing_time;
@@ -304,8 +310,24 @@ WriteContests(TextWriter &writer, const ContestStatistics &olc_plus,
 
 int main(int argc, char **argv)
 {
+#ifdef IGC_ONLY
+  Args args(argc, argv, "FILE.igc");
+
+  const char *input_file = args.ExpectNext();
+
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return EXIT_FAILURE;
+  }
+
+  DebugReplayIGC *replay = new DebugReplayIGC(reader);
+#else
   Args args(argc, argv, "DRIVER FILE");
   DebugReplay *replay = CreateDebugReplay(args);
+#endif
+
   if (replay == NULL)
     return EXIT_FAILURE;
 

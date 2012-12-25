@@ -697,6 +697,7 @@ DEBUG_PROGRAM_NAMES = \
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += \
 	AnalyseFlight \
+	AnalyseFlightIGC \
 	FeedTCP \
 	FeedFlyNetData
 endif
@@ -1512,6 +1513,25 @@ ANALYSE_FLIGHT_SOURCES = \
 ANALYSE_FLIGHT_LDADD = $(DEBUG_REPLAY_LDADD)
 ANALYSE_FLIGHT_DEPENDS = CONTEST UTIL GEO MATH TIME
 $(eval $(call link-program,AnalyseFlight,ANALYSE_FLIGHT))
+
+ANALYSE_FLIGHT_IGC_SOURCES = \
+	$(DEBUG_REPLAY_IGC_SOURCES) \
+	$(DEBUG_REPLAY_COMMON_SOURCES) \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(SRC)/JSON/Writer.cpp \
+	$(SRC)/Formatter/TimeFormatter.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/ContestPrinting.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseJSON.cpp \
+	$(TEST_SRC_DIR)/FlightPhaseDetector.cpp \
+	$(TEST_SRC_DIR)/AnalyseFlightIGC.cpp
+ANALYSE_FLIGHT_IGC_LDADD = $(IO_LIBS) $(OS_LIBS)
+ANALYSE_FLIGHT_IGC_DEPENDS = CONTEST UTIL GEO MATH TIME
+$(eval $(call link-program,AnalyseFlightIGC,ANALYSE_FLIGHT_IGC))
 
 FLIGHT_PATH_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
