@@ -639,6 +639,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunTrace \
 	RunOLCAnalysis \
 	FlightPath \
+	FlightPathIGC \
 	BenchmarkProjection \
 	BenchmarkFAITriangleSector \
 	DumpTextFile DumpTextZip WriteTextFile RunTextWriter \
@@ -1524,6 +1525,20 @@ FLIGHT_PATH_SOURCES = \
 FLIGHT_PATH_LDADD = $(DEBUG_REPLAY_LDADD)
 FLIGHT_PATH_DEPENDS = UTIL GEO MATH TIME
 $(eval $(call link-program,FlightPath,FLIGHT_PATH))
+
+FLIGHT_PATH_IGC_SOURCES = \
+	$(DEBUG_REPLAY_IGC_SOURCES) \
+	$(DEBUG_REPLAY_COMMON_SOURCES) \
+	$(SRC)/IGC/IGCParser.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideSettings.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Point.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/FlightPathIGC.cpp
+FLIGHT_PATH_IGC_LDADD = $(IO_LIBS) $(OS_LIBS)
+FLIGHT_PATH_IGC_DEPENDS = UTIL GEO MATH TIME
+$(eval $(call link-program,FlightPathIGC,FLIGHT_PATH_IGC))
 
 VIEW_IMAGE_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \

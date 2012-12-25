@@ -22,8 +22,14 @@ Copyright_License {
 */
 
 #include "OS/Args.hpp"
-#include "DebugReplay.hpp"
 #include "Engine/Trace/Trace.hpp"
+
+#ifdef IGC_ONLY
+#include "DebugReplayIGC.hpp"
+#include "IO/FileLineReader.hpp"
+#else
+#include "DebugReplay.hpp"
+#endif
 
 int main(int argc, char **argv)
 {
@@ -31,7 +37,11 @@ int main(int argc, char **argv)
   unsigned max_points = 1000;
 
   Args args(argc, argv,
+#ifdef IGC_ONLY
+            "[options] FILE.igc\n"
+#else
             "[options] DRIVER FILE\n"
+#endif
             "Options:\n"
             "  --start=5000             Begin flight path at 5000 sec after UTC midnight,\n"
             "                           if not defined takeoff time is used\n"
@@ -72,7 +82,21 @@ int main(int argc, char **argv)
     args.UsageError();
   }
 
+#ifdef IGC_ONLY
+  const char *input_file = args.ExpectNext();
+
+  FileLineReaderA *reader = new FileLineReaderA(input_file);
+  if (reader->error()) {
+    delete reader;
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return EXIT_FAILURE;
+  }
+
+  DebugReplayIGC *replay = new DebugReplayIGC(reader);
+#else
   DebugReplay *replay = CreateDebugReplay(args);
+#endif
+
   if (replay == nullptr)
     return EXIT_FAILURE;
 
