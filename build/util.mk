@@ -16,3 +16,15 @@ else
 MKDIR ?= mkdir
 create-directory = $(MKDIR) -p $(abspath $(1))
 endif
+
+
+# Replaces slashes by backslashes on Windows.
+#
+# Example: $(call slash-subst,./foo/bar)
+#
+# Arguments: PATH
+ifeq ($(WINHOST),y)
+slash-subst = $(subst /,\\,$(1))
+else
+slash-subst = $(1)
+endif
