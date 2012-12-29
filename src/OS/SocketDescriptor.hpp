@@ -49,6 +49,7 @@ public:
 #endif
 
   SocketDescriptor() {}
+  SocketDescriptor(SocketDescriptor &&other):FileDescriptor((FileDescriptor &&)other) {}
 
 #ifndef HAVE_POSIX
   ~SocketDescriptor() {
@@ -63,6 +64,11 @@ public:
    */
   void Close();
 #endif
+
+  SocketDescriptor &operator=(SocketDescriptor &&other) {
+    ((FileDescriptor *)this)->operator=((FileDescriptor &&)other);
+    return *this;
+  }
 
   /**
    * Create a socket.
