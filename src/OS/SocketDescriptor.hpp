@@ -42,6 +42,12 @@ class SocketDescriptor : public FileDescriptor {
   SocketDescriptor(int _fd):FileDescriptor(_fd) {}
 
 public:
+#ifndef HAVE_POSIX
+  typedef unsigned socket_type;
+#else
+  typedef int socket_type;
+#endif
+
   SocketDescriptor() {}
 
 #ifndef HAVE_POSIX
