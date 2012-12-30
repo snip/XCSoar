@@ -26,11 +26,67 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Pen.hpp"
 #include "Look/ButtonLook.hpp"
+#include "Screen/OpenGL/Scissor.hpp"
+#include "Util/Macros.hpp"
 
 void
 ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
                            bool pressed)
 {
+//#if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
+#if 1
+  Color color_top, color_bottom, border_color;
+  if (focused) {
+    if (pressed) {
+      color_top = Color(0x00, 0x44, 0xcc);
+      color_bottom = Color(0x00, 0x44, 0xcc);
+    } else {
+      color_top = Color(0x00, 0x88, 0xcc);
+      color_bottom = Color(0x00, 0x44, 0xcc);
+    }
+    border_color = Color(0x00, 0x44, 0xcc);
+  } else {
+    color_top = COLOR_WHITE;
+    color_bottom = Color(0xe6, 0xe6, 0xe6);
+    border_color = Color(0xc5, 0xc5, 0xc5);
+  }
+
+  const GLCanvasScissor scissor(rc);
+
+  const RasterPoint vertices[] = {
+    { rc.left, rc.top },
+    { rc.right, rc.top },
+    { rc.left, rc.bottom },
+    { rc.right, rc.bottom },
+  };
+
+  glVertexPointer(2, GL_VALUE, 0, vertices);
+
+  const Color colors[] = {
+    color_top,
+    color_top,
+    color_bottom,
+    color_bottom,
+  };
+
+  glEnableClientState(GL_COLOR_ARRAY);
+
+#ifdef HAVE_GLES
+  glColorPointer(4, GL_FIXED, 0, colors);
+#else
+  glColorPointer(4, GL_UNSIGNED_BYTE, 0, colors);
+#endif
+
+  static_assert(ARRAY_SIZE(vertices) == ARRAY_SIZE(colors),
+                "Array size mismatch");
+
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, ARRAY_SIZE(vertices));
+
+  glDisableClientState(GL_COLOR_ARRAY);
+
+  canvas.DrawOutlineRectangle(rc.left, rc.top+1, rc.right-1, rc.bottom-1, border_color);
+
+#else
   const ButtonLook::StateLook &_look = focused ? look.focused : look.standard;
 
   canvas.DrawFilledRectangle(rc, _look.background_color);
@@ -46,6 +102,7 @@ ButtonRenderer::DrawButton(Canvas &canvas, PixelRect rc, bool focused,
                       rc.right - 1, rc.top + 1);
   canvas.DrawTwoLines(rc.left + 2, rc.bottom - 2, rc.right - 2, rc.bottom - 2,
                       rc.right - 2, rc.top + 2);
+#endif
 }
 
 PixelRect
