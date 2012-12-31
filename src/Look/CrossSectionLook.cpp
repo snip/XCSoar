@@ -29,6 +29,10 @@ CrossSectionLook::Initialise(const Font &_grid_font)
   background_color = COLOR_WHITE;
   text_color = COLOR_BLACK;
 
+#if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
+  background_fade_color = Color(0xf6, 0xf6, 0xf6);
+#endif
+
   sky_color = Color(0x0a, 0xb9, 0xf3);
   terrain_color = Color(0x80, 0x45, 0x15);
   terrain_brush.Set(terrain_color);

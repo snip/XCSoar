@@ -2146,6 +2146,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Renderer/AirspaceRendererSettings.cpp \
+	$(SRC)/Renderer/GradientRenderer.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/IO/ConfiguredFile.cpp \
 	$(SRC)/Operation/Operation.cpp \

@@ -33,6 +33,11 @@ struct CrossSectionLook {
   /** Background color */
   Color background_color;
 
+#if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
+  /** Background gradient fade color */
+  Color background_fade_color;
+#endif
+
   /** Text color */
   Color text_color;
 

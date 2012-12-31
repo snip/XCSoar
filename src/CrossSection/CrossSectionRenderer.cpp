@@ -31,6 +31,10 @@
 #include "NMEA/Aircraft.hpp"
 #include "Navigation/Aircraft.hpp"
 
+#if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
+#include "Renderer/GradientRenderer.hpp"
+#endif
+
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #endif
@@ -56,7 +60,13 @@ CrossSectionRenderer::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionRenderer::Paint(Canvas &canvas, const PixelRect rc) const
 {
+#if defined(EYE_CANDY) && defined(ENABLE_OPENGL)
+  DrawVerticalGradient(canvas, canvas.GetRect(), look.background_fade_color,
+                       look.background_color, look.background_color);
+#else
   canvas.Clear(look.background_color);
+#endif
+
   canvas.SetTextColor(look.text_color);
   canvas.Select(*look.grid_font);
 
