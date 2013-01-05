@@ -98,13 +98,7 @@ isqrt4(unsigned val)
 fixed
 thermal_recency_fn(unsigned x)
 {
-  return x < THERMALRECENCY_SIZE
-#ifdef FIXED_MATH
-    ? fixed(fixed::internal(), THERMALRECENCY[x])
-#else
-    ? THERMALRECENCY[x]
-#endif
-    : fixed(0);
+  return x < THERMALRECENCY_SIZE ? THERMALRECENCY[x] : fixed(0);
 }
 
 // find inverse sqrt of x scaled to NORMALISE_BITS^2 by using
