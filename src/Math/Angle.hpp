@@ -289,6 +289,16 @@ public:
   }
 
   gcc_pure
+  std::pair<fixed, fixed> FastSinCos() const {
+    return ::FastSinCos(Radians());
+  }
+
+  gcc_pure
+  std::pair<int, int> FastIntSinCos() const {
+    return ::FastIntSinCos(Radians());
+  }
+
+  gcc_pure
   fixed AbsoluteDegrees() const;
 
   gcc_pure

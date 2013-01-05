@@ -146,10 +146,14 @@ ComputeHeading(AttitudeState &attitude, const NMEAInfo &basic,
   if (basic.ground_speed_available && calculated.wind_available &&
       (positive(basic.ground_speed) || calculated.wind.IsNonZero()) &&
       calculated.flight.flying) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
-    x0 += calculated.wind.bearing.fastsine() * calculated.wind.norm;
-    y0 += calculated.wind.bearing.fastcosine() * calculated.wind.norm;
+    auto track_sincos = basic.track.FastSinCos();
+    auto wind_sincos = calculated.wind.bearing.FastSinCos();
+
+    fixed x0 = track_sincos.first * basic.ground_speed;
+    fixed y0 = track_sincos.second * basic.ground_speed;
+
+    x0 += wind_sincos.first * calculated.wind.norm;
+    y0 += wind_sincos.second * calculated.wind.norm;
 
     attitude.heading = Angle::FromXY(y0, x0).AsBearing();
   } else {
@@ -222,10 +226,14 @@ ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 
   const SpeedVector wind = calculated.wind;
   if (positive(basic.ground_speed) || wind.IsNonZero()) {
-    fixed x0 = basic.track.fastsine() * basic.ground_speed;
-    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
-    x0 += wind.bearing.fastsine() * wind.norm;
-    y0 += wind.bearing.fastcosine() * wind.norm;
+    auto track_sincos = basic.track.FastSinCos();
+    auto wind_sincos = calculated.wind.bearing.FastSinCos();
+
+    fixed x0 = track_sincos.first * basic.ground_speed;
+    fixed y0 = track_sincos.second * basic.ground_speed;
+
+    x0 += wind_sincos.first * calculated.wind.norm;
+    y0 += wind_sincos.second * calculated.wind.norm;
 
     TrueAirspeedEstimated = SmallHypot(x0, y0);
   }

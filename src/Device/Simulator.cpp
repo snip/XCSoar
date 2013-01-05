@@ -68,10 +68,11 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   const Angle angle = Angle::FullCircle() * i / 255;
   Angle dangle = (angle + Angle::Degrees(120)).AsBearing();
   Angle hangle = dangle.Flipped().AsBearing();
+  auto sincos = angle.FastIntSinCos();
 
-  int alt = (angle.ifastsine()) / 7;
-  int north = (angle.ifastsine()) / 2 - 200;
-  int east = (angle.ifastcosine()) / 1.5;
+  int alt = sincos.first / 7;
+  int north = sincos.first / 2 - 200;
+  int east = sincos.second / 1.5;
   int track = -(int)angle.AsBearing().Degrees();
   unsigned alarm_level = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
 
@@ -84,9 +85,11 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
           alarm_level, north, east, alt, track);
   parser.ParseLine(buffer, basic);
 
-  alt = (angle.ifastcosine()) / 10;
-  north = (dangle.ifastsine()) / 1.20 + 300;
-  east = (dangle.ifastcosine()) + 500;
+  alt = sincos.second / 10;
+
+  sincos = dangle.FastIntSinCos();
+  north = sincos.first / 1.20 + 300;
+  east = sincos.second + 500;
   track = (int)hangle.Degrees();
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,

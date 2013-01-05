@@ -80,6 +80,14 @@ ifastcosine(fixed x)
 }
 
 gcc_const
+static inline std::pair<int, int>
+FastIntSinCos(fixed x)
+{
+  unsigned index = NATIVE_TO_INT(x);
+  return std::make_pair(ISINETABLE[index], ICOSTABLE[index]);
+}
+
+gcc_const
 static inline fixed
 fastsine(fixed x)
 {
@@ -98,6 +106,19 @@ fastcosine(fixed x)
   return fixed(fixed::internal(), COSTABLE[NATIVE_TO_INT(x)]);
 #else
   return COSTABLE[NATIVE_TO_INT(x)];
+#endif
+}
+
+gcc_const
+static inline std::pair<fixed, fixed>
+FastSinCos(fixed x)
+{
+  unsigned index = NATIVE_TO_INT(x);
+#ifdef FIXED_MATH
+  return std::make_pair(fixed(fixed::internal(), SINETABLE[index]),
+                        fixed(fixed::internal(), COSTABLE[index]));
+#else
+  return std::make_pair(SINETABLE[index], COSTABLE[index]);
 #endif
 }
 

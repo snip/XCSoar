@@ -34,8 +34,9 @@ FastRotation::SetAngle(Angle _angle)
     return;
 
   angle = _angle;
-  cost = angle.fastcosine();
-  sint = angle.fastsine();
+  auto sincos = angle.FastSinCos();
+  cost = sincos.second;
+  sint = sincos.first;
 }
 
 FastRotation::Pair
@@ -52,8 +53,9 @@ FastIntegerRotation::SetAngle(Angle _angle)
     return;
 
   angle = _angle;
-  cost = angle.ifastcosine();
-  sint = angle.ifastsine();
+  auto sincos = angle.FastIntSinCos();
+  cost = sincos.second;
+  sint = sincos.first;
 }
 
 FastIntegerRotation::Pair

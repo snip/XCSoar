@@ -375,9 +375,11 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
   const Angle fudgeelevation =
     Angle::Degrees(fixed(10.0 + 80.0 * brightness / 255.0));
 
-  const int sx = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastsine());
-  const int sy = (int)(255 * fudgeelevation.fastcosine() * -sunazimuth.fastcosine());
-  const int sz = (int)(255 * fudgeelevation.fastsine());
+  auto fudge_sincos = fudgeelevation.FastSinCos();
+  auto azimuth_sincos = sunazimuth.FastSinCos();
+  const int sx = (int)(255 * fudge_sincos.second * -azimuth_sincos.first);
+  const int sy = (int)(255 * fudge_sincos.second * -azimuth_sincos.second);
+  const int sz = (int)(255 * fudge_sincos.first);
 
   GenerateSlopeImage(height_scale, contrast,
                      sx, sy, sz);

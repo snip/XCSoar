@@ -58,8 +58,9 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   canvas.Select(pen_f);
   for (auto it = summary.pts.begin(); it != summary.pts.end(); ++it, ++i) {
     Angle a = Angle::Radians(it->p * sweep);
-    int x = center.x + (int)(radius * a.fastsine());
-    int y = center.y - (int)(radius * a.fastcosine());
+    auto sincos = a.FastSinCos();
+    int x = center.x + (int)(radius * sincos.first);
+    int y = center.y - (int)(radius * sincos.second);
     int w;
     if (i == summary.active) {
       if (it->achieved)
