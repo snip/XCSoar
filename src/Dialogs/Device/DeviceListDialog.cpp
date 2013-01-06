@@ -271,25 +271,32 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     CommonInterface::SetSystemSettings().devices[idx];
   const Flags flags(*items[idx]);
 
+  const PixelScalar line_height = rc.bottom - rc.top;
+
   const UPixelScalar margin = Layout::GetTextPadding();
 
   TCHAR port_name_buffer[128];
   const TCHAR *port_name =
     config.GetPortName(port_name_buffer, ARRAY_SIZE(port_name_buffer));
 
-  StaticString<256> text(_T("A: "));
+  StaticString<256> text(_T("A"));
   text[0u] += idx;
+
+  canvas.Select(*look.list.font_bold);
+  PixelSize char_size = canvas.CalcTextSize(text);
+  canvas.DrawText(rc.left + (line_height - char_size.cx) / 2,
+                  rc.top + (line_height - char_size.cy) / 2, text);
 
   if (config.UsesDriver()) {
     const TCHAR *driver_name = FindDriverDisplayName(config.driver_name);
 
-    text.AppendFormat(_("%s on %s"), driver_name, port_name);
+    text.Format(_("%s on %s"), driver_name, port_name);
   } else {
-    text.append(port_name);
+    text = port_name;
   }
 
   canvas.Select(*look.list.font);
-  canvas.DrawText(rc.left + margin, rc.top + margin, text);
+  canvas.DrawText(rc.left + margin + line_height, rc.top + margin, text);
 
   /* show a list of features that are available in the second row */
 
@@ -337,8 +344,8 @@ DeviceListWidget::OnPaintItem(Canvas &canvas, const PixelRect rc, unsigned idx)
   }
 
   canvas.Select(*look.small_font);
-  canvas.DrawText(rc.left + margin, rc.top + 2 * margin + font_height,
-                  status);
+  canvas.DrawText(rc.left + margin + line_height,
+                  rc.top + 2 * margin + font_height, status);
 }
 
 void
