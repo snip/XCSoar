@@ -45,6 +45,11 @@ namespace CommandLine {
   static constexpr bool resizable = false;
 #endif
 
+#if !defined(_WIN32_WCE) && !defined(ANDROID)
+#define HAVE_CMDLINE_FORCE_TOUCHSCREEN
+  extern bool force_touchscreen;
+#endif
+
 /**
  * Reads and parses arguments/options from the command line
  * @param CommandLine command line argument string

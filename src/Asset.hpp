@@ -24,6 +24,7 @@ Copyright_License {
 #define ASSET_H
 
 #include "Hardware/ModelType.hpp"
+#include "CommandLine.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -204,10 +205,17 @@ HasPointer()
  * Does this device have a touch screen?  This is useful to know for
  * sizing controls, as a touch screen may require bigger areas.
  */
+#ifndef HAVE_CMDLINE_FORCE_TOUCHSCREEN
 constexpr
+#endif
 static inline bool
 HasTouchScreen()
 {
+#ifdef HAVE_CMDLINE_FORCE_TOUCHSCREEN
+  if (CommandLine::force_touchscreen)
+    return true;
+#endif
+
   return IsAndroid() || (IsWindowsCE() && !IsAltair());
 }
 

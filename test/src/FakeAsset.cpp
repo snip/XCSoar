@@ -28,3 +28,9 @@ Copyright_License {
 ModelType global_model_type = ModelType::GENERIC;
 
 #endif
+
+#ifdef HAVE_CMDLINE_FORCE_TOUCHSCREEN
+namespace CommandLine {
+  bool force_touchscreen = false;
+}
+#endif

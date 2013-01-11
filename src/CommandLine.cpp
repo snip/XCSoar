@@ -44,6 +44,10 @@ namespace CommandLine {
 #ifdef HAVE_CMDLINE_RESIZABLE
   bool resizable = false;
 #endif
+
+#ifdef HAVE_CMDLINE_FORCE_TOUCHSCREEN
+  bool force_touchscreen = false;
+#endif
 }
 
 void
@@ -109,6 +113,11 @@ CommandLine::Parse(Args &args)
 #ifdef HAVE_CMDLINE_RESIZABLE
     else if (strcmp(s, "-resizable") == 0) {
       resizable = true;
+    }
+#endif
+#ifdef HAVE_CMDLINE_FORCE_TOUCHSCREEN
+    else if (StringIsEqual(s, "-touchscreen")) {
+      force_touchscreen = true;
     }
 #endif
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__WINE__)
