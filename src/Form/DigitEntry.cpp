@@ -133,11 +133,11 @@ void
 DigitEntry::CalculateLayout()
 {
   const UPixelScalar control_height = Layout::GetMaximumControlHeight();
-  const UPixelScalar padding = Layout::GetTextPadding();
-
   const UPixelScalar min_value_height = control_height * 3 / 2;
 
   PixelSize digit_size = look.large_font->TextSize(_T("8"));
+  const UPixelScalar padding = digit_size.cx / 2;
+
   digit_size.cy += 2 * padding;
   if (digit_size.cy < (PixelScalar)min_value_height)
     digit_size.cy = min_value_height;
