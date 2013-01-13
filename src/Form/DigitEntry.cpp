@@ -137,7 +137,7 @@ DigitEntry::CalculateLayout()
 
   const UPixelScalar min_value_height = control_height * 3 / 2;
 
-  PixelSize digit_size = look.text_font->TextSize(_T("8"));
+  PixelSize digit_size = look.large_font->TextSize(_T("8"));
   digit_size.cy += 2 * padding;
   if (digit_size.cy < (PixelScalar)min_value_height)
     digit_size.cy = min_value_height;
@@ -557,10 +557,10 @@ DigitEntry::OnPaint(Canvas &canvas)
   if (HaveClipping())
     canvas.Clear(look.background_color);
 
-  canvas.Select(*look.text_font);
+  canvas.Select(*look.large_font);
   canvas.SetBackgroundOpaque();
 
-  const unsigned text_height = look.text_font->GetHeight();
+  const unsigned text_height = look.large_font->GetHeight();
   const int y = (top + bottom - text_height) / 2;
 
   PixelRect rc;

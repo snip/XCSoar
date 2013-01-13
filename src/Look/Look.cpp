@@ -28,7 +28,7 @@ void
 Look::Initialise(const Font &map_font, const Font &map_bold_font,
                  const Font &map_label_font)
 {
-  dialog.Initialise(map_bold_font, map_font, map_label_font,
+  dialog.Initialise(map_bold_font, map_font, map_label_font, map_font,
                     map_bold_font, map_font, map_bold_font);
   traffic.Initialise();
   flarm_dialog.Initialise(traffic, false);
@@ -51,7 +51,7 @@ Look::InitialiseConfigured(const UISettings &settings,
 #endif
                            const Font &infobox_title_font)
 {
-  dialog.Initialise(map_bold_font, map_font, map_label_font,
+  dialog.Initialise(map_bold_font, map_font, map_label_font, infobox_value_font,
                     map_bold_font, map_font, map_bold_font);
   terminal.Initialise(monospace_font);
   units.Initialise();

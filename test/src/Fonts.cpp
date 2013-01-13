@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <string.h>
 
-Font normal_font, small_font, bold_font, monospace_font;
+Font normal_font, small_font, large_font, bold_font, monospace_font;
 
 static const TCHAR *
 GetStandardMonospaceFontFace()
@@ -83,6 +83,9 @@ InitialiseFonts()
   InitialiseLogfont(&lf, face, font_height / 2 - Layout::Scale(2));
   small_font.Load(lf);
 
+  InitialiseLogfont(&lf, face, font_height);
+  large_font.Load(lf);
+
   InitialiseLogfont(&lf, face, font_height / 2, true);
   bold_font.Load(lf);
 
@@ -96,6 +99,7 @@ DeinitialiseFonts()
 {
   monospace_font.Destroy();
   bold_font.Destroy();
+  large_font.Destroy();
   small_font.Destroy();
   normal_font.Destroy();
 }

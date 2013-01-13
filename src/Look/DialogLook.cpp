@@ -32,6 +32,7 @@ void
 DialogLook::Initialise(const Font &caption_font,
                        const Font &_text_font,
                        const Font &_small_font,
+                       const Font &_large_font,
                        const Font &button_font,
                        const Font &list_font,
                        const Font &list_font_bold)
@@ -51,6 +52,7 @@ DialogLook::Initialise(const Font &caption_font,
 
   text_font = &_text_font;
   small_font = &_small_font;
+  large_font = &_large_font;
   button.Initialise(button_font);
 
   focused.background_color = COLOR_XCSOAR_DARK;

@@ -155,7 +155,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dialog_look = &look->dialog;
 #elif defined(ENABLE_DIALOG_LOOK)
   dialog_look = new DialogLook();
-  dialog_look->Initialise(bold_font, normal_font, small_font,
+  dialog_look->Initialise(bold_font, normal_font, small_font, large_font,
                           bold_font, bold_font, bold_font);
 #endif
 
