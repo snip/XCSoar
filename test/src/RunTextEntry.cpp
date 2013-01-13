@@ -29,11 +29,19 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "LocalPath.hpp"
 #include "Dialogs/TimeEntry.hpp"
+#include "Dialogs/NumberEntry.hpp"
+#include "Math/Angle.hpp"
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
 
 bool
 TimeEntryDialog(const TCHAR *caption, RoughTime &value, bool nullable)
+{
+  return false;
+}
+
+bool
+AngleEntryDialog(const TCHAR *caption, Angle &value)
 {
   return false;
 }

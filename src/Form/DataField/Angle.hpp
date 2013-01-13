@@ -44,18 +44,18 @@ class AngleDataField : public DataField {
 public:
   AngleDataField(unsigned _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
-    :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step), fine(_fine) {}
+    :DataField(Type::ANGLE, false, listener),
+     value(Import(_value)), step(_step) {}
 
   AngleDataField(int _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
-    :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step), fine(_fine) {}
+    :DataField(Type::ANGLE, false, listener),
+     value(Import(_value)), step(_step) {}
 
   AngleDataField(Angle _value, unsigned _step, bool _fine,
                  DataFieldListener *listener=nullptr)
-    :DataField(Type::ANGLE, true, listener),
-     value(Import(_value)), step(_step), fine(_fine) {}
+    :DataField(Type::ANGLE, false, listener),
+     value(Import(_value)), step(_step) {}
 
   constexpr
   static unsigned Import(unsigned value) {
@@ -105,9 +105,6 @@ public:
 
   virtual void Inc() override;
   virtual void Dec() override;
-
-  virtual ComboList *CreateComboList() const override;
-  virtual void SetFromCombo(int i, TCHAR *s) override;
 };
 
 #endif
