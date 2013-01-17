@@ -38,6 +38,7 @@ enum class ModelType : uint8_t {
   NOKIA_500,
   PN6000,
   LX_MINI_MAP,
+  OUDIE,
 };
 
 constexpr
