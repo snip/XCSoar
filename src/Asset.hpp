@@ -38,13 +38,10 @@ void ReadAssetNumber();
 
 // model info
 #ifdef HAVE_MODEL_TYPE
-
 extern ModelType global_model_type;
-
+ModelType DetectModelType();
 #else
-
 #define global_model_type ModelType::GENERIC
-
 #endif
 
 /**

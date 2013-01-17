@@ -29,6 +29,11 @@ Copyright_License {
 #include "IO/FileHandle.hpp"
 #include "Util/CharUtil.hpp"
 
+#ifdef HAVE_MODEL_TYPE
+#include "Config/Registry.hpp"
+#include "Util/StringUtil.hpp"
+#endif
+
 #if defined(WIN32) && (!defined(__GNUC__) || defined(_WIN32_WCE))
 #include <windows.h>
 #include <winioctl.h>
@@ -182,3 +187,22 @@ ReadAssetNumber()
     LogStartUp(_T("Asset ID: %s (fallback)"), asset_number);
   }
 }
+
+#ifdef HAVE_MODEL_TYPE
+ModelType
+DetectModelType()
+{
+  static const TCHAR *const reg_key = _T("System\\CurrentControlSet\\Control");
+  static const TCHAR *const reg_value = _T("OEMINfo");
+
+  TCHAR model[64];
+
+  RegistryKey key(HKEY_LOCAL_MACHINE, reg_key, true);
+  if (!key.error() && key.GetValue(reg_value, model, ARRAY_SIZE(model))) {
+    if (StringIsEqual(model, _T("Oudie")))
+      return ModelType::OUDIE;
+  }
+
+  return ModelType::GENERIC;
+}
+#endif

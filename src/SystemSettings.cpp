@@ -59,6 +59,6 @@ SystemSettings::SetDefaults()
   }
 
 #ifdef HAVE_MODEL_TYPE
-  model_type = ModelType::GENERIC;
+  model_type = DetectModelType();
 #endif
 }
