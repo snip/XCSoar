@@ -34,6 +34,7 @@
 #include "Profile/DeviceConfig.hpp"
 #include "Blackboard/DeviceBlackboard.hpp"
 #include "Interface.hpp"
+#include "Asset.hpp"
 
 #ifdef _WIN32_WCE
 #include "Device/Windows/Enumerator.hpp"
@@ -170,6 +171,13 @@ DetectSerialPorts(DataFieldEnum &df)
   while (enumerator.Next()) {
     AddPort(df, DeviceConfig::PortType::SERIAL, enumerator.GetName(),
             enumerator.GetDisplayName());
+    found = true;
+  }
+
+  // The Bluetooth port detection on the Oudie fails so we add that manually
+  if (IsOudie()) {
+    AddPort(df, DeviceConfig::PortType::SERIAL,
+            _T("COM5:"), _T("Bluetooth (COM5)"));
     found = true;
   }
 
