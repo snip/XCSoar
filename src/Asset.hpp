@@ -135,6 +135,16 @@ IsHP31X()
 }
 
 /**
+ * Returns whether the application is running on a Naviter Oudie
+ * @return True if host hardware is a Naviter Oudie, False otherwise
+ */
+static inline bool
+IsOudie()
+{
+  return global_model_type == ModelType::OUDIE;
+}
+
+/**
  * Returns whether the application is running on an Altair
  * @return True if host hardware is an Altair, False otherwise
  */
